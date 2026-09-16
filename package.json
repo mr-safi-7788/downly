@@ -1,13 +1,15 @@
 {
   "name": "downly",
   "version": "1.0.0",
-  "description": "Multi Social Video Tool",
+  "description": "Video downloader for TikTok, Instagram, Pinterest, YouTube and Facebook",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2",
-    "@distube/ytdl-core": "^4.15.8"
+    "express": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
