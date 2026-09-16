@@ -1,5 +1,6 @@
 const express = require("express")
 const path = require("path")
+const { Readable } = require("stream")
 
 const app = express()
 const PORT = process.env.PORT || 10000
@@ -16,6 +17,8 @@ function isValidUrl(url) {
     return false
   }
 }
+
+// ---------- Analyze / Fetch media info ----------
 
 app.post("/api/fetch", async (req, res) => {
   const url = req.body && req.body.url
@@ -66,6 +69,38 @@ app.post("/api/fetch", async (req, res) => {
   }
 })
 
+// ---------- Direct download proxy (forces real download, no new tab) ----------
+
+app.get("/api/download-proxy", async (req, res) => {
+  const url = req.query.url
+  const filename = req.query.filename || "downly-file"
+
+  if (!url || !isValidUrl(url)) {
+    return res.status(400).send("Invalid URL")
+  }
+
+  try {
+    const response = await fetch(url)
+
+    if (!response.ok || !response.body) {
+      return res.status(400).send("Could not fetch media")
+    }
+
+    const contentType = response.headers.get("content-type") || "application/octet-stream"
+
+    res.setHeader("Content-Type", contentType)
+    res.setHeader("Content-Disposition", `attachment; filename="${filename}"`)
+
+    Readable.fromWeb(response.body).pipe(res)
+
+  } catch (err) {
+    console.error("Proxy download error:", err)
+    res.status(500).send("Failed to download")
+  }
+})
+
+// ---------- Fallback ----------
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
 })
@@ -78,4 +113,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Downly is running on port ${PORT}`)
 })
-                                   
