@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Downloader</title>
-
-<style>
-* { box-sizing: border-box; }
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Downly | Video & Media Downloader</title><link rel="manifest" href="/manifest.json"><meta name="theme-color" content="#ff2855">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black"><style>
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -18,16 +19,36 @@ body {
 .container {
   width: min(700px, 94%);
   margin: auto;
-  padding: 40px 0;
+  padding: 30px 0 50px;
 }
 
 h1 {
   font-size: clamp(32px, 7vw, 50px);
   text-align: center;
-  margin: 0 0 30px;
+  margin: 0 0 20px;
 }
 
-.pink { color: #ff2855; }
+.pink {
+  color: #ff2855;
+}
+
+/* INSTALL BUTTON */
+
+#installBtn {
+  display: none;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 16px;
+  border: 0;
+  border-radius: 15px;
+  background: #ff2855;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* TABS */
 
 .tabs {
   display: grid;
@@ -54,6 +75,8 @@ h1 {
   border-color: #ff2855;
 }
 
+/* MAIN BOX */
+
 .box {
   padding: 18px;
   border: 1px solid #292929;
@@ -72,7 +95,9 @@ input {
   outline: none;
 }
 
-input:focus { border-color: #ff2855; }
+input:focus {
+  border-color: #ff2855;
+}
 
 .search {
   width: 100%;
@@ -87,9 +112,17 @@ input:focus { border-color: #ff2855; }
   cursor: pointer;
 }
 
-.search:disabled { opacity: 0.6; cursor: not-allowed; }
+.search:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-.result { display: none; margin-top: 25px; }
+/* RESULT */
+
+.result {
+  display: none;
+  margin-top: 25px;
+}
 
 .message {
   padding: 16px;
@@ -100,7 +133,10 @@ input:focus { border-color: #ff2855; }
   margin-bottom: 20px;
 }
 
-.message.success { background: #0f2818; color: #9affb8; }
+.message.success {
+  background: #0f2818;
+  color: #9affb8;
+}
 
 .preview {
   padding: 18px;
@@ -110,7 +146,8 @@ input:focus { border-color: #ff2855; }
   text-align: center;
 }
 
-.preview img, .preview video {
+.preview img,
+.preview video {
   width: 100%;
   border-radius: 14px;
   max-height: 480px;
@@ -148,191 +185,592 @@ input:focus { border-color: #ff2855; }
   border: 1px solid #333;
   color: white;
 }
-</style>
-</head>
 
-<body>
+/* MOBILE */
 
-<div class="container">
+@media (max-width: 500px) {
 
-  <h1>Down<span class="pink">ly</span></h1>
+  .container {
+    padding-top: 20px;
+  }
 
-  <div class="tabs">
-    <div class="tab active" data-platform="tiktok">TikTok</div>
-    <div class="tab" data-platform="instagram">Instagram</div>
-    <div class="tab" data-platform="pinterest">Pinterest</div>
-    <div class="tab" data-platform="youtube">YouTube</div>
-    <div class="tab" data-platform="facebook">Facebook</div>
-  </div>
+  .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-  <div class="box">
-    <input id="url" type="text" placeholder="Paste TikTok video link here">
-    <button id="searchBtn" class="search" onclick="search()">Search</button>
-  </div>
+  .tab {
+    padding: 13px 5px;
+  }
 
-  <div id="result" class="result">
-    <div id="message" class="message"></div>
-    <div id="preview" class="preview" style="display:none;"></div>
-  </div>
-
+}
+</style></head><body><div class="container">  <h1>Down<span class="pink">ly</span></h1>  <button id="installBtn">
+    Install Downly App
+  </button>  <div class="tabs"><div class="tab active" data-platform="tiktok">
+  TikTok
 </div>
 
-<script>
+<div class="tab" data-platform="instagram">
+  Instagram
+</div>
 
-let currentPlatform = "tiktok"
+<div class="tab" data-platform="pinterest">
+  Pinterest
+</div>
+
+<div class="tab" data-platform="youtube">
+  YouTube
+</div>
+
+<div class="tab" data-platform="facebook">
+  Facebook
+</div>
+
+  </div>  <div class="box"><input
+  id="url"
+  type="text"
+  placeholder="Paste TikTok video link here"
+>
+
+<button
+  id="searchBtn"
+  class="search"
+  onclick="search()"
+>
+  Search
+</button>
+
+  </div>  <div id="result" class="result"><div id="message" class="message"></div>
+
+<div
+  id="preview"
+  class="preview"
+  style="display:none;"
+></div>
+
+  </div></div><script>
+
+/* =========================
+   PLATFORM
+========================= */
+
+let currentPlatform = "tiktok";
 
 const placeholders = {
-  tiktok: "Paste TikTok video link here",
-  instagram: "Paste Instagram post or reel link here",
-  pinterest: "Paste Pinterest pin link here",
-  youtube: "Paste YouTube video link here",
-  facebook: "Paste Facebook video link here"
-}
+
+  tiktok:
+    "Paste TikTok video link here",
+
+  instagram:
+    "Paste Instagram post or reel link here",
+
+  pinterest:
+    "Paste Pinterest pin link here",
+
+  youtube:
+    "Paste YouTube video link here",
+
+  facebook:
+    "Paste Facebook video link here"
+
+};
 
 const qualityLabels = {
-  hd_no_watermark: "Download HD (No Watermark)",
-  no_watermark: "Download (No Watermark)",
-  watermark: "Download (With Watermark)",
-  audio: "Download Audio Only (MP3)"
-}
 
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
-    tab.classList.add("active")
-    currentPlatform = tab.dataset.platform
-    document.getElementById("url").placeholder = placeholders[currentPlatform]
-    document.getElementById("result").style.display = "none"
-    document.getElementById("url").value = ""
-  })
-})
+  hd_no_watermark:
+    "Download HD (No Watermark)",
+
+  no_watermark:
+    "Download (No Watermark)",
+
+  watermark:
+    "Download (With Watermark)",
+
+  audio:
+    "Download Audio Only (MP3)"
+
+};
+
+
+/* =========================
+   PLATFORM TABS
+========================= */
+
+document
+  .querySelectorAll(".tab")
+  .forEach(tab => {
+
+    tab.addEventListener("click", () => {
+
+      document
+        .querySelectorAll(".tab")
+        .forEach(t =>
+          t.classList.remove("active")
+        );
+
+      tab.classList.add("active");
+
+      currentPlatform =
+        tab.dataset.platform;
+
+      document.getElementById("url").placeholder =
+        placeholders[currentPlatform];
+
+      document.getElementById("result").style.display =
+        "none";
+
+      document.getElementById("url").value = "";
+
+    });
+
+  });
+
+
+/* =========================
+   SEARCH
+========================= */
 
 async function search() {
 
-  const input = document.getElementById("url")
-  const url = input.value.trim()
-  const btn = document.getElementById("searchBtn")
+  const input =
+    document.getElementById("url");
+
+  const url =
+    input.value.trim();
+
+  const btn =
+    document.getElementById("searchBtn");
 
   if (!url) {
-    alert("Please paste a link first.")
-    return
+
+    alert("Please paste a link first.");
+
+    return;
+
   }
 
-  const result = document.getElementById("result")
-  const message = document.getElementById("message")
-  const preview = document.getElementById("preview")
+  const result =
+    document.getElementById("result");
 
-  result.style.display = "block"
-  preview.style.display = "none"
-  message.classList.remove("success")
-  message.textContent = "Searching..."
+  const message =
+    document.getElementById("message");
 
-  btn.disabled = true
-  btn.textContent = "Searching..."
+  const preview =
+    document.getElementById("preview");
+
+  result.style.display = "block";
+
+  preview.style.display = "none";
+
+  message.classList.remove("success");
+
+  message.textContent = "Searching...";
+
+  btn.disabled = true;
+
+  btn.textContent = "Searching...";
+
 
   try {
 
-    const response = await fetch("/api/fetch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url })
-    })
+    const response =
+      await fetch("/api/fetch", {
 
-    const data = await response.json()
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+          url: url
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
 
     if (!data.success) {
-      message.textContent = data.error || "Could not find this content."
-      return
+
+      message.textContent =
+        data.error ||
+        "Could not find this content.";
+
+      return;
+
     }
 
-    message.classList.add("success")
-    message.textContent = "Found! See preview below."
 
-    renderPreview(data)
+    message.classList.add("success");
+
+    message.textContent =
+      "Found! See preview below.";
+
+
+    renderPreview(data);
+
 
   } catch (error) {
-    message.textContent = "Server connection failed. Please try again."
+
+    console.error(error);
+
+    message.textContent =
+      "Server connection failed. Please try again.";
+
   } finally {
-    btn.disabled = false
-    btn.textContent = "Search"
+
+    btn.disabled = false;
+
+    btn.textContent = "Search";
+
   }
+
 }
 
-function proxyDownloadUrl(mediaUrl, quality, extension) {
-  const filename = `downly-${quality}.${extension}`
-  return `/api/download-proxy?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`
+
+/* =========================
+   DOWNLOAD PROXY
+========================= */
+
+function proxyDownloadUrl(
+  mediaUrl,
+  quality,
+  extension
+) {
+
+  const filename =
+    `downly-${quality}.${extension}`;
+
+  return `/api/download-proxy?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`;
+
 }
+
+
+/* =========================
+   PREVIEW
+========================= */
 
 function renderPreview(data) {
 
-  const preview = document.getElementById("preview")
-  preview.style.display = "block"
-  preview.innerHTML = ""
+  const preview =
+    document.getElementById("preview");
 
-  const titleEl = document.createElement("h3")
-  titleEl.textContent = data.title || "Preview"
-  preview.appendChild(titleEl)
+  preview.style.display = "block";
 
-  const videos = data.medias.filter(m => m.type === "video")
-  const images = data.medias.filter(m => m.type === "image")
-  const audios = data.medias.filter(m => m.type === "audio")
+  preview.innerHTML = "";
+
+
+  const titleEl =
+    document.createElement("h3");
+
+  titleEl.textContent =
+    data.title || "Preview";
+
+  preview.appendChild(titleEl);
+
+
+  const videos =
+    data.medias.filter(
+      m => m.type === "video"
+    );
+
+  const images =
+    data.medias.filter(
+      m => m.type === "image"
+    );
+
+  const audios =
+    data.medias.filter(
+      m => m.type === "audio"
+    );
+
 
   const bestVideo =
-    videos.find(v => v.quality === "hd_no_watermark") ||
-    videos.find(v => v.quality === "no_watermark") ||
-    videos[0]
+    videos.find(
+      v => v.quality === "hd_no_watermark"
+    ) ||
+
+    videos.find(
+      v => v.quality === "no_watermark"
+    ) ||
+
+    videos[0];
+
 
   if (bestVideo) {
-    const video = document.createElement("video")
-    video.src = bestVideo.url
-    video.controls = true
-    if (data.thumbnail) video.poster = data.thumbnail
-    preview.appendChild(video)
+
+    const video =
+      document.createElement("video");
+
+    video.src =
+      bestVideo.url;
+
+    video.controls = true;
+
+    video.playsInline = true;
+
+    if (data.thumbnail) {
+
+      video.poster =
+        data.thumbnail;
+
+    }
+
+    preview.appendChild(video);
+
+
   } else if (images.length > 0) {
-    const img = document.createElement("img")
-    img.src = images[0].url
-    preview.appendChild(img)
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      images[0].url;
+
+    img.alt = "Preview";
+
+    preview.appendChild(img);
+
+
   } else if (data.thumbnail) {
-    const img = document.createElement("img")
-    img.src = data.thumbnail
-    preview.appendChild(img)
+
+    const img =
+      document.createElement("img");
+
+    img.src =
+      data.thumbnail;
+
+    img.alt = "Preview";
+
+    preview.appendChild(img);
+
   }
 
-  const buttons = document.createElement("div")
-  buttons.className = "buttons"
+
+  const buttons =
+    document.createElement("div");
+
+  buttons.className =
+    "buttons";
+
 
   videos.forEach((v, i) => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(v.url, v.quality, v.extension)
-    a.className = i === 0 ? "dl" : "dl secondary"
-    a.textContent = qualityLabels[v.quality] || `Download Video (${v.quality})`
-    buttons.appendChild(a)
-  })
+
+    const a =
+      document.createElement("a");
+
+    a.href =
+      proxyDownloadUrl(
+        v.url,
+        v.quality,
+        v.extension
+      );
+
+    a.className =
+      i === 0
+        ? "dl"
+        : "dl secondary";
+
+    a.textContent =
+      qualityLabels[v.quality] ||
+      `Download Video (${v.quality})`;
+
+    a.setAttribute(
+      "download",
+      ""
+    );
+
+    buttons.appendChild(a);
+
+  });
+
 
   images.forEach((img, i) => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(img.url, `image-${i + 1}`, img.extension)
-    a.className = "dl secondary"
-    a.textContent = images.length > 1 ? `Download Image ${i + 1}` : "Download Image"
-    buttons.appendChild(a)
-  })
+
+    const a =
+      document.createElement("a");
+
+    a.href =
+      proxyDownloadUrl(
+        img.url,
+        `image-${i + 1}`,
+        img.extension
+      );
+
+    a.className =
+      "dl secondary";
+
+    a.textContent =
+      images.length > 1
+        ? `Download Image ${i + 1}`
+        : "Download Image";
+
+    a.setAttribute(
+      "download",
+      ""
+    );
+
+    buttons.appendChild(a);
+
+  });
+
 
   audios.forEach(aud => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(aud.url, "audio", aud.extension)
-    a.className = "dl secondary"
-    a.textContent = qualityLabels.audio
-    buttons.appendChild(a)
-  })
 
-  preview.appendChild(buttons)
+    const a =
+      document.createElement("a");
+
+    a.href =
+      proxyDownloadUrl(
+        aud.url,
+        "audio",
+        aud.extension
+      );
+
+    a.className =
+      "dl secondary";
+
+    a.textContent =
+      qualityLabels.audio;
+
+    a.setAttribute(
+      "download",
+      ""
+    );
+
+    buttons.appendChild(a);
+
+  });
+
+
+  preview.appendChild(buttons);
+
 }
 
-document.getElementById("url").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") search()
-})
 
-</script>
+/* =========================
+   ENTER KEY
+========================= */
 
-</body>
+document
+  .getElementById("url")
+  .addEventListener("keydown", e => {
+
+    if (e.key === "Enter") {
+
+      search();
+
+    }
+
+  });
+
+
+/* =========================
+   PWA INSTALL
+========================= */
+
+let deferredPrompt = null;
+
+const installBtn =
+  document.getElementById("installBtn");
+
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    installBtn.style.display =
+      "block";
+
+  }
+);
+
+
+installBtn.addEventListener(
+  "click",
+  async () => {
+
+    if (!deferredPrompt) {
+
+      return;
+
+    }
+
+    deferredPrompt.prompt();
+
+    const choice =
+      await deferredPrompt.userChoice;
+
+
+    if (choice.outcome === "accepted") {
+
+      console.log(
+        "Downly installation accepted"
+      );
+
+    }
+
+
+    deferredPrompt = null;
+
+    installBtn.style.display =
+      "none";
+
+  }
+);
+
+
+window.addEventListener(
+  "appinstalled",
+  () => {
+
+    installBtn.style.display =
+      "none";
+
+    deferredPrompt = null;
+
+  }
+);
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener(
+    "load",
+    () => {
+
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then(() => {
+
+          console.log(
+            "Downly Service Worker registered"
+          );
+
+        })
+        .catch(error => {
+
+          console.error(
+            "Service Worker error:",
+            error
+          );
+
+        });
+
+    }
+  );
+
+}
+
+</script></body>
 </html>
