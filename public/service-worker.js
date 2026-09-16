@@ -1,4 +1,4 @@
-const CACHE_NAME = "dowmly-cache-v1";
+const CACHE_NAME = "dowmly-cache-v2";
 
 const urlsToCache = [
   "/",
