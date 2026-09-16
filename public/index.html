@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downly | TikTok, Instagram & Pinterest Downloader</title>
+<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Downloader</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -30,14 +30,14 @@ h1 {
 .pink { color: #ff2855; }
 
 .tabs {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
   margin-bottom: 20px;
 }
 
 .tab {
-  flex: 1;
-  padding: 14px;
+  padding: 14px 8px;
   border-radius: 14px;
   background: #111;
   border: 1px solid #292929;
@@ -45,6 +45,7 @@ h1 {
   cursor: pointer;
   font-weight: bold;
   color: #999;
+  font-size: 14px;
 }
 
 .tab.active {
@@ -160,6 +161,8 @@ input:focus { border-color: #ff2855; }
     <div class="tab active" data-platform="tiktok">TikTok</div>
     <div class="tab" data-platform="instagram">Instagram</div>
     <div class="tab" data-platform="pinterest">Pinterest</div>
+    <div class="tab" data-platform="youtube">YouTube</div>
+    <div class="tab" data-platform="facebook">Facebook</div>
   </div>
 
   <div class="box">
@@ -181,7 +184,9 @@ let currentPlatform = "tiktok"
 const placeholders = {
   tiktok: "Paste TikTok video link here",
   instagram: "Paste Instagram post or reel link here",
-  pinterest: "Paste Pinterest pin link here"
+  pinterest: "Paste Pinterest pin link here",
+  youtube: "Paste YouTube video link here",
+  facebook: "Paste Facebook video link here"
 }
 
 const qualityLabels = {
