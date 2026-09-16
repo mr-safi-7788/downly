@@ -53,7 +53,6 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif}
   header{display:flex;align-items:center;gap:10px;padding:16px 20px}
-  header .logo-icon{width:44px;height:44px;flex-shrink:0;display:block}
   header h1{font-size:20px}
   header h1 span{color:var(--red)}
   nav{display:flex;gap:16px;flex-wrap:wrap;padding:0 20px 16px}
@@ -85,18 +84,6 @@
 <body>
 
 <header>
-  <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#ff3b3b"/>
-        <stop offset="100%" stop-color="#b30000"/>
-      </linearGradient>
-    </defs>
-    <circle cx="50" cy="50" r="48" fill="#000"/>
-    <ellipse cx="50" cy="52" rx="42" ry="16" fill="none" stroke="url(#redGrad)" stroke-width="7" transform="rotate(-18 50 52)"/>
-    <path d="M50 18 L74 78 L62 78 L50 46 L38 78 L26 78 Z" fill="#fff"/>
-    <path d="M43 58 L60 58 L51.5 72 Z" fill="url(#redGrad)"/>
-  </svg>
   <h1>All media <span>dowmly</span></h1>
 </header>
 
