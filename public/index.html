@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Downly | Multi Social Video Tool</title>
 
 <style>
@@ -66,6 +65,11 @@ input {
   color: white;
   font-size: 16px;
   outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #ff2855;
 }
 
 .analyze {
@@ -79,6 +83,16 @@ input {
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.analyze:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.analyze:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .platforms {
@@ -109,6 +123,11 @@ input {
   text-align: center;
 }
 
+.message.success {
+  background: #0f2818;
+  color: #9affb8;
+}
+
 .preview {
   margin-top: 25px;
   padding: 20px;
@@ -127,6 +146,16 @@ input {
   border: 0;
   border-radius: 15px;
   background: #000;
+}
+
+.placeholder {
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  text-align: center;
+  padding: 30px;
 }
 
 .actions {
@@ -157,7 +186,7 @@ input {
   text-decoration: none;
 }
 
-@media(max-width: 600px) {
+@media (max-width: 600px) {
   .container {
     padding: 35px 0;
   }
@@ -181,9 +210,7 @@ input {
 
 <div class="container">
 
-  <div class="badge">
-    Multi Social Video Tool
-  </div>
+  <div class="badge">Multi Social Video Tool</div>
 
   <h1>
     Download your<br>
@@ -202,7 +229,7 @@ input {
       placeholder="Paste TikTok, YouTube, Instagram, Facebook or Pinterest URL"
     >
 
-    <button class="analyze" onclick="analyzeVideo()">
+    <button id="analyzeBtn" class="analyze" onclick="analyzeVideo()">
       Analyze
     </button>
 
@@ -220,30 +247,19 @@ input {
 
     <div id="message" class="message"></div>
 
-    <div id="previewBox" class="preview">
+    <div id="previewBox" class="preview" style="display:none;">
       <h2 id="previewTitle">Video Preview</h2>
 
       <div id="player"></div>
 
       <div class="actions">
-
-        <button
-          id="downloadButton"
-          class="download"
-          onclick="downloadVideo()"
-        >
+        <button id="downloadButton" class="download" onclick="downloadVideo()">
           Download Video
         </button>
 
-        <a
-          id="openButton"
-          class="open"
-          href="#"
-          target="_blank"
-        >
+        <a id="openButton" class="open" href="#" target="_blank" rel="noopener">
           Open Original
         </a>
-
       </div>
     </div>
 
@@ -259,6 +275,7 @@ async function analyzeVideo() {
 
   const input = document.getElementById("url")
   const url = input.value.trim()
+  const btn = document.getElementById("analyzeBtn")
 
   if (!url) {
     alert("Please paste a video URL first.")
@@ -269,21 +286,27 @@ async function analyzeVideo() {
 
   const result = document.getElementById("result")
   const message = document.getElementById("message")
+  const previewBox = document.getElementById("previewBox")
   const player = document.getElementById("player")
   const openButton = document.getElementById("openButton")
 
   result.style.display = "block"
-
+  previewBox.style.display = "none"
+  message.classList.remove("success")
   message.textContent = "Analyzing video..."
   player.innerHTML = ""
-
   openButton.href = url
+
+  btn.disabled = true
+  btn.textContent = "Analyzing..."
 
   try {
 
-    const response = await fetch(
-      `/api/analyze?url=${encodeURIComponent(url)}`
-    )
+    const response = await fetch(`/api/analyze?url=${encodeURIComponent(url)}`)
+
+    if (!response.ok) {
+      throw new Error("Request failed")
+    }
 
     const data = await response.json()
 
@@ -292,15 +315,20 @@ async function analyzeVideo() {
       return
     }
 
-    message.textContent =
-      `${data.platform} detected. Preview is being loaded.`
+    message.classList.add("success")
+    message.textContent = `${data.platform} detected. Preview loaded below.`
+    previewBox.style.display = "block"
 
     loadPreview(data)
 
   } catch (error) {
 
-    message.textContent =
-      "Server connection failed. Please try again."
+    message.textContent = "Server connection failed. Please try again."
+
+  } finally {
+
+    btn.disabled = false
+    btn.textContent = "Analyze"
 
   }
 }
@@ -313,28 +341,12 @@ function loadPreview(data) {
   player.innerHTML = ""
 
   if (!data.preview) {
-
-    player.innerHTML = `
-      <div style="
-        min-height:300px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        color:#888;
-        text-align:center;
-        padding:30px;
-      ">
-        Preview is not available for this URL.
-      </div>
-    `
-
+    player.innerHTML = `<div class="placeholder">Preview is not available for this URL.</div>`
     return
   }
 
   if (data.preview.type === "youtube") {
-
     title.textContent = "YouTube Preview"
-
     player.innerHTML = `
       <iframe
         class="player"
@@ -343,14 +355,11 @@ function loadPreview(data) {
         allowfullscreen>
       </iframe>
     `
-
     return
   }
 
   if (data.preview.type === "tiktok") {
-
     title.textContent = "TikTok Preview"
-
     player.innerHTML = `
       <iframe
         class="player"
@@ -359,14 +368,11 @@ function loadPreview(data) {
         allowfullscreen>
       </iframe>
     `
-
     return
   }
 
   if (data.preview.type === "instagram") {
-
     title.textContent = "Instagram Preview"
-
     player.innerHTML = `
       <blockquote
         class="instagram-media"
@@ -375,18 +381,13 @@ function loadPreview(data) {
         style="width:100%; margin:0;">
       </blockquote>
     `
-
     loadInstagram()
-
     return
   }
 
   if (data.preview.type === "facebook") {
-
     title.textContent = "Facebook Preview"
-
     const encoded = encodeURIComponent(data.originalUrl)
-
     player.innerHTML = `
       <iframe
         class="player"
@@ -397,77 +398,63 @@ function loadPreview(data) {
         allowfullscreen>
       </iframe>
     `
-
     return
   }
 
   if (data.preview.type === "pinterest") {
-
     title.textContent = "Pinterest Preview"
-
     player.innerHTML = `
-      <div
-        class="pin"
-        data-pin-do="embedPin"
-        data-pin-width="large"
-        data-pin-terse="true">
+      <div class="pin" data-pin-do="embedPin" data-pin-width="large" data-pin-terse="true">
         <a href="${data.originalUrl}">Pinterest Video</a>
       </div>
     `
-
     loadPinterest()
-
     return
   }
 }
 
 function loadInstagram() {
-
   if (window.instgrm) {
     window.instgrm.Embeds.process()
     return
   }
 
   const script = document.createElement("script")
-
   script.src = "https://www.instagram.com/embed.js"
   script.async = true
-
   script.onload = () => {
-    if (window.instgrm) {
-      window.instgrm.Embeds.process()
-    }
+    if (window.instgrm) window.instgrm.Embeds.process()
   }
-
   document.body.appendChild(script)
 }
 
 function loadPinterest() {
-
   if (window.PinUtils) {
     window.PinUtils.build()
     return
   }
 
   const script = document.createElement("script")
-
   script.src = "https://assets.pinterest.com/js/pinit.js"
   script.async = true
-
   document.body.appendChild(script)
 }
 
 function downloadVideo() {
-
   if (!currentUrl) {
     alert("Analyze a video first.")
     return
   }
 
-  alert(
-    "Preview system is connected. Direct social-media downloading requires an authorized media source."
-  )
+  alert("Preview system is connected. Direct social-media downloading requires an authorized media source.")
 }
+
+// Allow pressing Enter in the input to trigger analyze
+document.getElementById("url").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    analyzeVideo()
+  }
+})
 
 </script>
 
