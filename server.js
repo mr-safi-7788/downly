@@ -1,5 +1,6 @@
 const express = require("express")
 const path = require("path")
+const ytdl = require("@distube/ytdl-core")
 
 const app = express()
 const PORT = process.env.PORT || 10000
@@ -7,29 +8,17 @@ const PORT = process.env.PORT || 10000
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "public")))
 
+// ---------- Helpers ----------
+
 function detectPlatform(url) {
   try {
     const host = new URL(url).hostname.toLowerCase()
 
-    if (host.includes("youtube.com") || host.includes("youtu.be")) {
-      return "YouTube"
-    }
-
-    if (host.includes("tiktok.com")) {
-      return "TikTok"
-    }
-
-    if (host.includes("instagram.com")) {
-      return "Instagram"
-    }
-
-    if (host.includes("pinterest.com") || host.includes("pin.it")) {
-      return "Pinterest"
-    }
-
-    if (host.includes("facebook.com") || host.includes("fb.watch")) {
-      return "Facebook"
-    }
+    if (host.includes("youtube.com") || host.includes("youtu.be")) return "YouTube"
+    if (host.includes("tiktok.com")) return "TikTok"
+    if (host.includes("instagram.com")) return "Instagram"
+    if (host.includes("pinterest.com") || host.includes("pin.it")) return "Pinterest"
+    if (host.includes("facebook.com") || host.includes("fb.watch")) return "Facebook"
 
     return "Unknown"
   } catch {
@@ -41,96 +30,156 @@ function getYouTubeId(url) {
   try {
     const u = new URL(url)
 
-    if (u.hostname.includes("youtu.be")) {
-      return u.pathname.substring(1)
-    }
-
-    if (u.searchParams.get("v")) {
-      return u.searchParams.get("v")
-    }
+    if (u.hostname.includes("youtu.be")) return u.pathname.substring(1)
+    if (u.searchParams.get("v")) return u.searchParams.get("v")
 
     const match = u.pathname.match(/\/(shorts|embed|live)\/([^/?]+)/)
-
     return match ? match[2] : null
   } catch {
     return null
   }
 }
 
-function getTikTokId(url) {
-  const match = url.match(/\/video\/(\d+)/)
-
-  return match ? match[1] : null
+function isValidUrl(url) {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
 }
+
+// ---------- Analyze route ----------
 
 app.get("/api/analyze", async (req, res) => {
   const url = req.query.url
 
-  if (!url) {
-    return res.status(400).json({
-      success: false,
-      error: "Video URL is required"
-    })
+  if (!url || !isValidUrl(url)) {
+    return res.status(400).json({ success: false, error: "A valid video URL is required" })
   }
 
   const platform = detectPlatform(url)
 
-  let result = {
+  const result = {
     success: true,
     platform,
     originalUrl: url,
     preview: null,
-    downloadAvailable: false
+    downloadSupported: false
   }
 
-  if (platform === "YouTube") {
-    const id = getYouTubeId(url)
-
-    if (id) {
-      result.preview = {
-        type: "youtube",
-        embedUrl: `https://www.youtube.com/embed/${id}`
+  switch (platform) {
+    case "YouTube": {
+      const id = getYouTubeId(url)
+      if (id) {
+        result.preview = { type: "youtube", embedUrl: `https://www.youtube.com/embed/${id}` }
+        result.downloadSupported = true
+      } else {
+        result.success = false
+        result.error = "Could not read this YouTube link"
       }
+      break
     }
-  }
 
-  if (platform === "TikTok") {
-    const id = getTikTokId(url)
+    case "TikTok":
+      result.preview = { type: "tiktok", embedUrl: null }
+      result.downloadSupported = true
+      break
 
-    if (id) {
-      result.preview = {
-        type: "tiktok",
-        embedUrl: `https://www.tiktok.com/player/v1/${id}?description=1&music_info=1`
-      }
-    }
-  }
+    case "Instagram":
+      result.preview = { type: "instagram", embedUrl: url }
+      result.downloadSupported = false
+      break
 
-  if (platform === "Instagram") {
-    result.preview = {
-      type: "instagram",
-      embedUrl: url
-    }
-  }
+    case "Facebook":
+      result.preview = { type: "facebook", embedUrl: url }
+      result.downloadSupported = false
+      break
 
-  if (platform === "Facebook") {
-    result.preview = {
-      type: "facebook",
-      embedUrl: url
-    }
-  }
+    case "Pinterest":
+      result.preview = { type: "pinterest", embedUrl: url }
+      result.downloadSupported = false
+      break
 
-  if (platform === "Pinterest") {
-    result.preview = {
-      type: "pinterest",
-      embedUrl: url
-    }
+    default:
+      result.success = false
+      result.error = "This platform is not supported"
   }
 
   res.json(result)
 })
 
+// ---------- Download route ----------
+
+app.get("/api/download", async (req, res) => {
+  const url = req.query.url
+
+  if (!url || !isValidUrl(url)) {
+    return res.status(400).json({ success: false, error: "Valid URL required" })
+  }
+
+  const platform = detectPlatform(url)
+
+  try {
+
+    if (platform === "TikTok") {
+      const apiRes = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`)
+      const data = await apiRes.json()
+
+      if (data.code !== 0 || !data.data) {
+        return res.status(400).json({ success: false, error: "Could not fetch this TikTok video" })
+      }
+
+      return res.json({
+        success: true,
+        downloadUrl: data.data.hdplay || data.data.play,
+        title: data.data.title || "TikTok Video"
+      })
+    }
+
+    if (platform === "YouTube") {
+      const id = getYouTubeId(url)
+
+      if (!id || !ytdl.validateID(id)) {
+        return res.status(400).json({ success: false, error: "Invalid YouTube video" })
+      }
+
+      const info = await ytdl.getInfo(id)
+      const format = ytdl.chooseFormat(info.formats, { quality: "highest", filter: "audioandvideo" })
+
+      if (!format) {
+        return res.status(400).json({ success: false, error: "No downloadable format found" })
+      }
+
+      return res.json({
+        success: true,
+        downloadUrl: format.url,
+        title: info.videoDetails.title || "YouTube Video"
+      })
+    }
+
+    return res.status(400).json({
+      success: false,
+      error: "Direct download is not supported for this platform yet"
+    })
+
+  } catch (err) {
+    console.error("Download error:", err)
+    return res.status(500).json({ success: false, error: "Failed to fetch video. Try again." })
+  }
+})
+
+// ---------- Fallback ----------
+
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
+})
+
+// ---------- Error handler ----------
+
+app.use((err, req, res, next) => {
+  console.error("Server error:", err)
+  res.status(500).json({ success: false, error: "Something went wrong on the server" })
 })
 
 app.listen(PORT, "0.0.0.0", () => {
