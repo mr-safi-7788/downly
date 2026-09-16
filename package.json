@@ -1,0 +1,12 @@
+{
+  "name": "downly",
+  "version": "1.0.0",
+  "description": "Downly Multi Social Media Video Tool",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
