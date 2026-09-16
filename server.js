@@ -1,6 +1,7 @@
 const express = require("express")
 const path = require("path")
 const { Readable } = require("stream")
+const posts = require("./posts")
 
 const app = express()
 const PORT = process.env.PORT || 10000
@@ -17,6 +18,111 @@ function isValidUrl(url) {
     return false
   }
 }
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+}
+
+function pageWrap(title, description, bodyContent) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHtml(title)}</title>
+<meta name="description" content="${escapeHtml(description)}">
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #050505;
+  color: white;
+  line-height: 1.7;
+}
+.container {
+  width: min(800px, 94%);
+  margin: auto;
+  padding: 40px 0;
+}
+a { color: #ff2855; text-decoration: none; }
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.nav a.logo { font-size: 22px; font-weight: bold; color: white; }
+.nav a.logo span { color: #ff2855; }
+h1 { font-size: clamp(28px, 6vw, 42px); margin-bottom: 8px; }
+.date { color: #888; font-size: 14px; margin-bottom: 25px; display: block; }
+.post-card {
+  display: block;
+  padding: 20px;
+  border: 1px solid #292929;
+  border-radius: 18px;
+  background: #0c0c0c;
+  margin-bottom: 15px;
+}
+.post-card h2 { margin: 0 0 8px; font-size: 20px; color: white; }
+.post-card p { color: #aaa; margin: 0 0 8px; }
+.post-content h2 { font-size: 22px; margin-top: 30px; }
+.post-content p { color: #ccc; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="nav">
+    <a href="/" class="logo">Down<span>ly</span></a>
+    <a href="/blog">Blog</a>
+  </div>
+  ${bodyContent}
+</div>
+</body>
+</html>`
+}
+
+// ---------- Blog list ----------
+
+app.get("/blog", (req, res) => {
+  const items = posts
+    .slice()
+    .reverse()
+    .map(p => `
+      <a href="/blog/${p.slug}" class="post-card">
+        <h2>${escapeHtml(p.title)}</h2>
+        <p>${escapeHtml(p.description)}</p>
+        <span class="date">${p.date}</span>
+      </a>
+    `)
+    .join("")
+
+  const body = `<h1>Blog</h1>${items || "<p>No posts yet.</p>"}`
+
+  res.send(pageWrap("Blog | Downly", "Guides and tips for downloading TikTok, Instagram, Pinterest, YouTube and Facebook videos.", body))
+})
+
+// ---------- Single blog post ----------
+
+app.get("/blog/:slug", (req, res) => {
+  const post = posts.find(p => p.slug === req.params.slug)
+
+  if (!post) {
+    return res.status(404).send(pageWrap("Not Found | Downly", "Post not found", "<h1>Post not found</h1><a href='/blog'>Back to Blog</a>"))
+  }
+
+  const body = `
+    <a href="/blog">&larr; Back to Blog</a>
+    <h1 style="margin-top:20px;">${escapeHtml(post.title)}</h1>
+    <span class="date">${post.date}</span>
+    <div class="post-content">${post.content}</div>
+  `
+
+  res.send(pageWrap(`${post.title} | Downly`, post.description, body))
+})
 
 // ---------- Analyze / Fetch media info ----------
 
@@ -69,7 +175,7 @@ app.post("/api/fetch", async (req, res) => {
   }
 })
 
-// ---------- Direct download proxy (forces real download, no new tab) ----------
+// ---------- Direct download proxy ----------
 
 app.get("/api/download-proxy", async (req, res) => {
   const url = req.query.url
