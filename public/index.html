@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downly | Multi Social Video Tool</title>
+<title>Downly | TikTok, Instagram & Pinterest Downloader</title>
 
 <style>
 * { box-sizing: border-box; }
@@ -16,36 +16,44 @@ body {
 }
 
 .container {
-  width: min(900px, 94%);
+  width: min(700px, 94%);
   margin: auto;
-  padding: 50px 0;
-}
-
-.badge {
-  display: inline-block;
-  padding: 12px 24px;
-  border: 1px solid #333;
-  border-radius: 30px;
-  color: #ddd;
-  margin-bottom: 25px;
+  padding: 40px 0;
 }
 
 h1 {
-  font-size: clamp(42px, 8vw, 80px);
-  line-height: 0.95;
-  margin: 0 0 25px;
+  font-size: clamp(32px, 7vw, 50px);
+  text-align: center;
+  margin: 0 0 30px;
 }
 
 .pink { color: #ff2855; }
 
-.subtitle {
-  color: #aaa;
-  font-size: 20px;
-  line-height: 1.6;
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  flex: 1;
+  padding: 14px;
+  border-radius: 14px;
+  background: #111;
+  border: 1px solid #292929;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  color: #999;
+}
+
+.tab.active {
+  background: #ff2855;
+  color: white;
+  border-color: #ff2855;
 }
 
 .box {
-  margin-top: 35px;
   padding: 18px;
   border: 1px solid #292929;
   border-radius: 25px;
@@ -61,12 +69,11 @@ input {
   color: white;
   font-size: 16px;
   outline: none;
-  transition: border-color 0.2s;
 }
 
 input:focus { border-color: #ff2855; }
 
-.analyze {
+.search {
   width: 100%;
   margin-top: 12px;
   padding: 18px;
@@ -77,82 +84,53 @@ input:focus { border-color: #ff2855; }
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
-  transition: opacity 0.2s;
 }
 
-.analyze:disabled { opacity: 0.6; cursor: not-allowed; }
-.analyze:hover:not(:disabled) { opacity: 0.9; }
+.search:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.platforms {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.platform {
-  padding: 17px;
-  border-radius: 15px;
-  background: #111;
-  border: 1px solid #292929;
-  text-align: center;
-}
-
-.result { display: none; margin-top: 30px; }
+.result { display: none; margin-top: 25px; }
 
 .message {
-  padding: 18px;
+  padding: 16px;
   border-radius: 15px;
   background: #281017;
   color: #ff9aae;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .message.success { background: #0f2818; color: #9affb8; }
 
 .preview {
-  margin-top: 25px;
-  padding: 20px;
+  padding: 18px;
   background: #0d0d0d;
   border: 1px solid #292929;
   border-radius: 20px;
+  text-align: center;
 }
 
-.preview h2 { margin-top: 0; }
-
-.player {
+.preview img, .preview video {
   width: 100%;
-  min-height: 500px;
-  border: 0;
-  border-radius: 15px;
+  border-radius: 14px;
+  max-height: 480px;
+  object-fit: contain;
   background: #000;
 }
 
-.placeholder {
-  min-height: 300px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #888;
-  text-align: center;
-  padding: 30px;
+.preview h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #ddd;
 }
 
-.note {
-  margin-top: 12px;
-  font-size: 14px;
-  color: #888;
-  text-align: center;
-}
-
-.actions {
+.buttons {
   display: flex;
-  gap: 12px;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 15px;
 }
 
-.download {
-  flex: 1;
+.dl {
   padding: 16px;
   border: 0;
   border-radius: 14px;
@@ -160,26 +138,14 @@ input:focus { border-color: #ff2855; }
   color: black;
   font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
+  display: block;
 }
 
-.download:disabled { opacity: 0.5; cursor: not-allowed; }
-
-.open {
-  flex: 1;
-  padding: 16px;
-  border-radius: 14px;
+.dl.secondary {
   background: #181818;
   border: 1px solid #333;
   color: white;
-  text-align: center;
-  text-decoration: none;
-}
-
-@media (max-width: 600px) {
-  .container { padding: 35px 0; }
-  .platforms { grid-template-columns: 1fr 1fr; }
-  .player { min-height: 420px; }
-  .actions { flex-direction: column; }
 }
 </style>
 </head>
@@ -188,254 +154,146 @@ input:focus { border-color: #ff2855; }
 
 <div class="container">
 
-  <div class="badge">Multi Social Video Tool</div>
+  <h1>Down<span class="pink">ly</span></h1>
 
-  <h1>
-    Download your<br>
-    <span class="pink">videos</span> easily.
-  </h1>
-
-  <p class="subtitle">
-    Paste your video URL below and preview supported social media content.
-  </p>
+  <div class="tabs">
+    <div class="tab active" data-platform="tiktok">TikTok</div>
+    <div class="tab" data-platform="instagram">Instagram</div>
+    <div class="tab" data-platform="pinterest">Pinterest</div>
+  </div>
 
   <div class="box">
-
-    <input id="url" type="text" placeholder="Paste TikTok, YouTube, Instagram, Facebook or Pinterest URL">
-
-    <button id="analyzeBtn" class="analyze" onclick="analyzeVideo()">
-      Analyze
-    </button>
-
-    <div class="platforms">
-      <div class="platform">YouTube</div>
-      <div class="platform">TikTok</div>
-      <div class="platform">Instagram</div>
-      <div class="platform">Pinterest</div>
-      <div class="platform">Facebook</div>
-    </div>
-
+    <input id="url" type="text" placeholder="Paste TikTok video link here">
+    <button id="searchBtn" class="search" onclick="search()">Search</button>
   </div>
 
   <div id="result" class="result">
-
     <div id="message" class="message"></div>
-
-    <div id="previewBox" class="preview" style="display:none;">
-      <h2 id="previewTitle">Video Preview</h2>
-
-      <div id="player"></div>
-
-      <div class="actions">
-        <button id="downloadButton" class="download" onclick="downloadVideo()">
-          Download Video
-        </button>
-
-        <a id="openButton" class="open" href="#" target="_blank" rel="noopener">
-          Open Original
-        </a>
-      </div>
-
-      <div id="downloadNote" class="note" style="display:none;">
-        Direct download is not available for this platform. Use "Open Original" instead.
-      </div>
-    </div>
-
+    <div id="preview" class="preview" style="display:none;"></div>
   </div>
 
 </div>
 
 <script>
 
-let currentUrl = ""
-let downloadAllowed = false
+let currentPlatform = "tiktok"
 
-async function analyzeVideo() {
+const placeholders = {
+  tiktok: "Paste TikTok video link here",
+  instagram: "Paste Instagram post or reel link here",
+  pinterest: "Paste Pinterest pin link here"
+}
+
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
+    tab.classList.add("active")
+    currentPlatform = tab.dataset.platform
+    document.getElementById("url").placeholder = placeholders[currentPlatform]
+    document.getElementById("result").style.display = "none"
+    document.getElementById("url").value = ""
+  })
+})
+
+async function search() {
 
   const input = document.getElementById("url")
   const url = input.value.trim()
-  const btn = document.getElementById("analyzeBtn")
+  const btn = document.getElementById("searchBtn")
 
   if (!url) {
-    alert("Please paste a video URL first.")
+    alert("Please paste a link first.")
     return
   }
 
-  currentUrl = url
-
   const result = document.getElementById("result")
   const message = document.getElementById("message")
-  const previewBox = document.getElementById("previewBox")
-  const player = document.getElementById("player")
-  const openButton = document.getElementById("openButton")
-  const downloadButton = document.getElementById("downloadButton")
-  const downloadNote = document.getElementById("downloadNote")
+  const preview = document.getElementById("preview")
 
   result.style.display = "block"
-  previewBox.style.display = "none"
+  preview.style.display = "none"
   message.classList.remove("success")
-  message.textContent = "Analyzing video..."
-  player.innerHTML = ""
-  openButton.href = url
+  message.textContent = "Searching..."
 
   btn.disabled = true
-  btn.textContent = "Analyzing..."
+  btn.textContent = "Searching..."
 
   try {
 
-    const response = await fetch(`/api/analyze?url=${encodeURIComponent(url)}`)
-    if (!response.ok) throw new Error("Request failed")
-
+    const response = await fetch(`/api/${currentPlatform}?url=${encodeURIComponent(url)}`)
     const data = await response.json()
 
     if (!data.success) {
-      message.textContent = data.error || "Unable to analyze this URL."
+      message.textContent = data.error || "Could not find this content."
       return
     }
 
     message.classList.add("success")
-    message.textContent = `${data.platform} detected. Preview loaded below.`
-    previewBox.style.display = "block"
+    message.textContent = "Found! See preview below."
 
-    downloadAllowed = data.downloadSupported
-    downloadButton.style.display = downloadAllowed ? "block" : "none"
-    downloadNote.style.display = downloadAllowed ? "none" : "block"
-
-    loadPreview(data)
+    renderPreview(data)
 
   } catch (error) {
     message.textContent = "Server connection failed. Please try again."
   } finally {
     btn.disabled = false
-    btn.textContent = "Analyze"
+    btn.textContent = "Search"
   }
 }
 
-function loadPreview(data) {
+function renderPreview(data) {
 
-  const player = document.getElementById("player")
-  const title = document.getElementById("previewTitle")
+  const preview = document.getElementById("preview")
+  preview.style.display = "block"
+  preview.innerHTML = ""
 
-  player.innerHTML = ""
+  const titleEl = document.createElement("h3")
+  titleEl.textContent = data.title || "Preview"
+  preview.appendChild(titleEl)
 
-  if (!data.preview) {
-    player.innerHTML = `<div class="placeholder">Preview is not available for this URL.</div>`
-    return
-  }
+  if (currentPlatform === "tiktok") {
 
-  if (data.preview.type === "youtube") {
-    title.textContent = "YouTube Preview"
-    player.innerHTML = `
-      <iframe class="player" src="${data.preview.embedUrl}"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen></iframe>
+    const video = document.createElement("video")
+    video.src = data.noWatermarkUrl
+    video.controls = true
+    video.poster = data.cover || ""
+    preview.appendChild(video)
+
+    const buttons = document.createElement("div")
+    buttons.className = "buttons"
+
+    buttons.innerHTML = `
+      <a class="dl" href="${data.noWatermarkUrl}" download target="_blank">Download (No Watermark)</a>
+      <a class="dl secondary" href="${data.watermarkUrl}" download target="_blank">Download (With Watermark)</a>
+      ${data.audioUrl ? `<a class="dl secondary" href="${data.audioUrl}" download target="_blank">Download Audio Only</a>` : ""}
     `
+
+    preview.appendChild(buttons)
     return
   }
 
-  if (data.preview.type === "tiktok") {
-    title.textContent = "TikTok Video"
-    player.innerHTML = `<div class="placeholder">Preview not embeddable here. Tap "Download Video" or "Open Original" below.</div>`
-    return
+  // Instagram / Pinterest
+  if (data.type === "video") {
+    const video = document.createElement("video")
+    video.src = data.mediaUrl
+    video.controls = true
+    preview.appendChild(video)
+  } else {
+    const img = document.createElement("img")
+    img.src = data.mediaUrl
+    preview.appendChild(img)
   }
 
-  if (data.preview.type === "instagram") {
-    title.textContent = "Instagram Preview"
-    player.innerHTML = `
-      <blockquote class="instagram-media" data-instgrm-permalink="${data.originalUrl}"
-        data-instgrm-version="14" style="width:100%; margin:0;"></blockquote>
-    `
-    loadInstagram()
-    return
-  }
-
-  if (data.preview.type === "facebook") {
-    title.textContent = "Facebook Preview"
-    const encoded = encodeURIComponent(data.originalUrl)
-    player.innerHTML = `
-      <iframe class="player" src="https://www.facebook.com/plugins/video.php?href=${encoded}&show_text=false"
-        scrolling="no" frameborder="0"
-        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        allowfullscreen></iframe>
-    `
-    return
-  }
-
-  if (data.preview.type === "pinterest") {
-    title.textContent = "Pinterest Preview"
-    player.innerHTML = `
-      <div class="pin" data-pin-do="embedPin" data-pin-width="large" data-pin-terse="true">
-        <a href="${data.originalUrl}">Pinterest Video</a>
-      </div>
-    `
-    loadPinterest()
-    return
-  }
-}
-
-function loadInstagram() {
-  if (window.instgrm) { window.instgrm.Embeds.process(); return }
-  const script = document.createElement("script")
-  script.src = "https://www.instagram.com/embed.js"
-  script.async = true
-  script.onload = () => { if (window.instgrm) window.instgrm.Embeds.process() }
-  document.body.appendChild(script)
-}
-
-function loadPinterest() {
-  if (window.PinUtils) { window.PinUtils.build(); return }
-  const script = document.createElement("script")
-  script.src = "https://assets.pinterest.com/js/pinit.js"
-  script.async = true
-  document.body.appendChild(script)
-}
-
-async function downloadVideo() {
-
-  if (!currentUrl) {
-    alert("Analyze a video first.")
-    return
-  }
-
-  if (!downloadAllowed) {
-    alert("Direct download is not available for this platform yet.")
-    return
-  }
-
-  const btn = document.getElementById("downloadButton")
-  const originalText = btn.textContent
-
-  btn.disabled = true
-  btn.textContent = "Fetching video..."
-
-  try {
-
-    const response = await fetch(`/api/download?url=${encodeURIComponent(currentUrl)}`)
-    const data = await response.json()
-
-    if (!data.success) {
-      alert(data.error || "Could not download this video.")
-      return
-    }
-
-    const link = document.createElement("a")
-    link.href = data.downloadUrl
-    link.download = (data.title || "downly-video").replace(/[^a-z0-9]/gi, "_") + ".mp4"
-    link.target = "_blank"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-
-  } catch (error) {
-    alert("Download failed. Please try again.")
-  } finally {
-    btn.disabled = false
-    btn.textContent = originalText
-  }
+  const buttons = document.createElement("div")
+  buttons.className = "buttons"
+  buttons.innerHTML = `
+    <a class="dl" href="${data.mediaUrl}" download target="_blank">Download</a>
+  `
+  preview.appendChild(buttons)
 }
 
 document.getElementById("url").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") analyzeVideo()
+  if (e.key === "Enter") search()
 })
 
 </script>
