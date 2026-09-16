@@ -253,6 +253,11 @@ async function search() {
   }
 }
 
+function proxyDownloadUrl(mediaUrl, quality, extension) {
+  const filename = `downly-${quality}.${extension}`
+  return `/api/download-proxy?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`
+}
+
 function renderPreview(data) {
 
   const preview = document.getElementById("preview")
@@ -293,9 +298,7 @@ function renderPreview(data) {
 
   videos.forEach((v, i) => {
     const a = document.createElement("a")
-    a.href = v.url
-    a.download = true
-    a.target = "_blank"
+    a.href = proxyDownloadUrl(v.url, v.quality, v.extension)
     a.className = i === 0 ? "dl" : "dl secondary"
     a.textContent = qualityLabels[v.quality] || `Download Video (${v.quality})`
     buttons.appendChild(a)
@@ -303,9 +306,7 @@ function renderPreview(data) {
 
   images.forEach((img, i) => {
     const a = document.createElement("a")
-    a.href = img.url
-    a.download = true
-    a.target = "_blank"
+    a.href = proxyDownloadUrl(img.url, `image-${i + 1}`, img.extension)
     a.className = "dl secondary"
     a.textContent = images.length > 1 ? `Download Image ${i + 1}` : "Download Image"
     buttons.appendChild(a)
@@ -313,9 +314,7 @@ function renderPreview(data) {
 
   audios.forEach(aud => {
     const a = document.createElement("a")
-    a.href = aud.url
-    a.download = true
-    a.target = "_blank"
+    a.href = proxyDownloadUrl(aud.url, "audio", aud.extension)
     a.className = "dl secondary"
     a.textContent = qualityLabels.audio
     buttons.appendChild(a)
