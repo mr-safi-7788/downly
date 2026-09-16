@@ -184,6 +184,13 @@ const placeholders = {
   pinterest: "Paste Pinterest pin link here"
 }
 
+const qualityLabels = {
+  hd_no_watermark: "Download HD (No Watermark)",
+  no_watermark: "Download (No Watermark)",
+  watermark: "Download (With Watermark)",
+  audio: "Download Audio Only (MP3)"
+}
+
 document.querySelectorAll(".tab").forEach(tab => {
   tab.addEventListener("click", () => {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
@@ -220,7 +227,12 @@ async function search() {
 
   try {
 
-    const response = await fetch(`/api/${currentPlatform}?url=${encodeURIComponent(url)}`)
+    const response = await fetch("/api/fetch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url })
+    })
+
     const data = await response.json()
 
     if (!data.success) {
@@ -251,44 +263,64 @@ function renderPreview(data) {
   titleEl.textContent = data.title || "Preview"
   preview.appendChild(titleEl)
 
-  if (currentPlatform === "tiktok") {
+  const videos = data.medias.filter(m => m.type === "video")
+  const images = data.medias.filter(m => m.type === "image")
+  const audios = data.medias.filter(m => m.type === "audio")
 
+  const bestVideo =
+    videos.find(v => v.quality === "hd_no_watermark") ||
+    videos.find(v => v.quality === "no_watermark") ||
+    videos[0]
+
+  if (bestVideo) {
     const video = document.createElement("video")
-    video.src = data.noWatermarkUrl
+    video.src = bestVideo.url
     video.controls = true
-    video.poster = data.cover || ""
+    if (data.thumbnail) video.poster = data.thumbnail
     preview.appendChild(video)
-
-    const buttons = document.createElement("div")
-    buttons.className = "buttons"
-
-    buttons.innerHTML = `
-      <a class="dl" href="${data.noWatermarkUrl}" download target="_blank">Download (No Watermark)</a>
-      <a class="dl secondary" href="${data.watermarkUrl}" download target="_blank">Download (With Watermark)</a>
-      ${data.audioUrl ? `<a class="dl secondary" href="${data.audioUrl}" download target="_blank">Download Audio Only</a>` : ""}
-    `
-
-    preview.appendChild(buttons)
-    return
-  }
-
-  // Instagram / Pinterest
-  if (data.type === "video") {
-    const video = document.createElement("video")
-    video.src = data.mediaUrl
-    video.controls = true
-    preview.appendChild(video)
-  } else {
+  } else if (images.length > 0) {
     const img = document.createElement("img")
-    img.src = data.mediaUrl
+    img.src = images[0].url
+    preview.appendChild(img)
+  } else if (data.thumbnail) {
+    const img = document.createElement("img")
+    img.src = data.thumbnail
     preview.appendChild(img)
   }
 
   const buttons = document.createElement("div")
   buttons.className = "buttons"
-  buttons.innerHTML = `
-    <a class="dl" href="${data.mediaUrl}" download target="_blank">Download</a>
-  `
+
+  videos.forEach((v, i) => {
+    const a = document.createElement("a")
+    a.href = v.url
+    a.download = true
+    a.target = "_blank"
+    a.className = i === 0 ? "dl" : "dl secondary"
+    a.textContent = qualityLabels[v.quality] || `Download Video (${v.quality})`
+    buttons.appendChild(a)
+  })
+
+  images.forEach((img, i) => {
+    const a = document.createElement("a")
+    a.href = img.url
+    a.download = true
+    a.target = "_blank"
+    a.className = "dl secondary"
+    a.textContent = images.length > 1 ? `Download Image ${i + 1}` : "Download Image"
+    buttons.appendChild(a)
+  })
+
+  audios.forEach(aud => {
+    const a = document.createElement("a")
+    a.href = aud.url
+    a.download = true
+    a.target = "_blank"
+    a.className = "dl secondary"
+    a.textContent = qualityLabels.audio
+    buttons.appendChild(a)
+  })
+
   preview.appendChild(buttons)
 }
 
