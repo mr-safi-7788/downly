@@ -3,402 +3,158 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Downloader</title>
 
+<!-- ============ BASIC SEO ============ -->
+<title>Dowmly | TikTok, Instagram, Pinterest, YouTube & Facebook Video Downloader</title>
+<meta name="description" content="Free online tool to download videos from TikTok, Instagram, Pinterest, YouTube and Facebook without watermark. Fast, safe and no login required.">
+<meta name="keywords" content="tiktok downloader, instagram video downloader, youtube downloader, facebook video downloader, pinterest downloader">
+<link rel="canonical" href="https://downly-88cv.onrender.com/">
+
+<!-- ============ OPEN GRAPH (Facebook/WhatsApp share preview) ============ -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dowmly | Video Downloader for TikTok, Instagram, YouTube & More">
+<meta property="og:description" content="Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook — free, fast, no watermark.">
+<meta property="og:image" content="https://downly-88cv.onrender.com/icons/icon-512x512.png">
+<meta property="og:url" content="https://downly-88cv.onrender.com/">
+
+<!-- ============ TWITTER CARD ============ -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dowmly | Video Downloader">
+<meta name="twitter:description" content="Download videos from TikTok, Instagram, YouTube, Pinterest & Facebook for free.">
+<meta name="twitter:image" content="https://downly-88cv.onrender.com/icons/icon-512x512.png">
+
+<!-- ============ PWA: MANIFEST + THEME COLOR ============ -->
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#ff2855">
-<link rel="apple-touch-icon" href="/icon-192.png">
+<meta name="theme-color" content="#e50000">
+
+<!-- ============ ICONS (favicon + apple touch icon) ============ -->
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dowmly">
+
+<!-- ============ JSON-LD structured data (SEO rich result) ============ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Dowmly",
+  "url": "https://downly-88cv.onrender.com/",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #050505;
-  color: white;
-}
-
-.container {
-  width: min(700px, 94%);
-  margin: auto;
-  padding: 40px 0;
-}
-
-h1 {
-  font-size: clamp(32px, 7vw, 50px);
-  text-align: center;
-  margin: 0 0 20px;
-}
-
-.pink { color: #ff2855; }
-
-.install-bar {
-  display: none;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 14px 18px;
-  background: #0c0c0c;
-  border: 1px solid #ff2855;
-  border-radius: 16px;
-  margin-bottom: 20px;
-}
-
-.install-bar span {
-  font-size: 14px;
-  color: #ddd;
-}
-
-.install-btn {
-  padding: 10px 18px;
-  border: 0;
-  border-radius: 10px;
-  background: #ff2855;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.tabs {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.tab {
-  padding: 14px 8px;
-  border-radius: 14px;
-  background: #111;
-  border: 1px solid #292929;
-  text-align: center;
-  cursor: pointer;
-  font-weight: bold;
-  color: #999;
-  font-size: 14px;
-}
-
-.tab.active {
-  background: #ff2855;
-  color: white;
-  border-color: #ff2855;
-}
-
-.box {
-  padding: 18px;
-  border: 1px solid #292929;
-  border-radius: 25px;
-  background: #0c0c0c;
-}
-
-input {
-  width: 100%;
-  padding: 18px;
-  border-radius: 15px;
-  border: 1px solid #333;
-  background: #151515;
-  color: white;
-  font-size: 16px;
-  outline: none;
-}
-
-input:focus { border-color: #ff2855; }
-
-.search {
-  width: 100%;
-  margin-top: 12px;
-  padding: 18px;
-  border: 0;
-  border-radius: 15px;
-  background: #ff2855;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.search:disabled { opacity: 0.6; cursor: not-allowed; }
-
-.result { display: none; margin-top: 25px; }
-
-.message {
-  padding: 16px;
-  border-radius: 15px;
-  background: #281017;
-  color: #ff9aae;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-.message.success { background: #0f2818; color: #9affb8; }
-
-.preview {
-  padding: 18px;
-  background: #0d0d0d;
-  border: 1px solid #292929;
-  border-radius: 20px;
-  text-align: center;
-}
-
-.preview img, .preview video {
-  width: 100%;
-  border-radius: 14px;
-  max-height: 480px;
-  object-fit: contain;
-  background: #000;
-}
-
-.preview h3 {
-  margin-top: 0;
-  font-size: 16px;
-  color: #ddd;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.dl {
-  padding: 16px;
-  border: 0;
-  border-radius: 14px;
-  background: white;
-  color: black;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  display: block;
-}
-
-.dl.secondary {
-  background: #181818;
-  border: 1px solid #333;
-  color: white;
-}
+  :root{ --bg:#000; --red:#e50000; --white:#fff; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif}
+  header{display:flex;align-items:center;gap:10px;padding:16px 20px}
+  header img{width:44px;height:44px}
+  header h1{font-size:20px}
+  header h1 span{color:var(--red)}
+  nav{display:flex;gap:16px;flex-wrap:wrap;padding:0 20px 16px}
+  nav a{color:var(--white);text-decoration:none;font-size:14px;opacity:.85}
+  nav a:hover{opacity:1;color:var(--red)}
+  .search-box{display:flex;max-width:600px;margin:30px auto;padding:0 20px}
+  .search-box input{flex:1;padding:14px;border:none;border-radius:8px 0 0 8px;font-size:15px}
+  .search-box button{padding:14px 24px;background:var(--red);color:#fff;border:none;border-radius:0 8px 8px 0;cursor:pointer;font-weight:bold}
+  #install-btn{display:none;margin:0 auto 30px;background:var(--red);color:#fff;border:none;padding:12px 22px;border-radius:8px;font-size:15px;cursor:pointer}
+  .blog-section{max-width:900px;margin:50px auto;padding:0 20px}
+  .blog-section h2{margin-bottom:16px;border-left:4px solid var(--red);padding-left:10px}
+  .blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+  .blog-card{background:#111;border-radius:10px;padding:16px;text-decoration:none;color:#fff}
+  .blog-card h3{font-size:16px;margin-bottom:6px;color:#fff}
+  .blog-card p{font-size:13px;color:#aaa}
+  footer{text-align:center;padding:30px;color:#777;font-size:13px}
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<header>
+  <img src="/icons/icon-96x96.png" alt="Dowmly logo">
+  <h1>All media <span>dowmly</span></h1>
+</header>
 
-  <h1>Down<span class="pink">ly</span></h1>
+<nav>
+  <a href="#tiktok">TikTok</a>
+  <a href="#instagram">Instagram</a>
+  <a href="#pinterest">Pinterest</a>
+  <a href="#youtube">YouTube</a>
+  <a href="#facebook">Facebook</a>
+  <a href="/blog/">Blog</a>
+</nav>
 
-  <div id="installBar" class="install-bar">
-    <span>Install Downly as an app for faster access</span>
-    <button id="installBtn" class="install-btn">Install App</button>
-  </div>
-
-  <div class="tabs">
-    <div class="tab active" data-platform="tiktok">TikTok</div>
-    <div class="tab" data-platform="instagram">Instagram</div>
-    <div class="tab" data-platform="pinterest">Pinterest</div>
-    <div class="tab" data-platform="youtube">YouTube</div>
-    <div class="tab" data-platform="facebook">Facebook</div>
-  </div>
-
-  <div class="box">
-    <input id="url" type="text" placeholder="Paste TikTok video link here">
-    <button id="searchBtn" class="search" onclick="search()">Search</button>
-  </div>
-
-  <div id="result" class="result">
-    <div id="message" class="message"></div>
-    <div id="preview" class="preview" style="display:none;"></div>
-  </div>
-
+<div class="search-box">
+  <input type="text" placeholder="Paste video link here...">
+  <button>Search</button>
 </div>
 
+<!-- Install App button — sirf tab dikhta hai jab browser install ka mauka de -->
+<button id="install-btn">📲 Install App</button>
+
+<!-- ============ BLOG SECTION (SEO ke liye) ============ -->
+<section class="blog-section">
+  <h2>Latest Blog Posts</h2>
+  <div class="blog-grid">
+    <a class="blog-card" href="/blog/how-to-download-tiktok-video-without-watermark.html">
+      <h3>How to Download TikTok Videos Without Watermark</h3>
+      <p>Step-by-step guide, 2026 updated method.</p>
+    </a>
+    <a class="blog-card" href="/blog/instagram-reels-downloader-guide.html">
+      <h3>Instagram Reels Downloader Guide</h3>
+      <p>Save reels and stories in HD quality easily.</p>
+    </a>
+    <a class="blog-card" href="/blog/youtube-video-downloader-2026.html">
+      <h3>Best YouTube Video Downloader 2026</h3>
+      <p>Fast, free and safe ways to save YouTube videos.</p>
+    </a>
+  </div>
+</section>
+
+<footer>© 2026 Dowmly. All rights reserved.</footer>
+
 <script>
-
-// ---------- PWA Install Prompt ----------
-
-let deferredPrompt = null
-
-window.addEventListener("beforeinstallprompt", (e) => {
-  e.preventDefault()
-  deferredPrompt = e
-  document.getElementById("installBar").style.display = "flex"
-})
-
-document.getElementById("installBtn").addEventListener("click", async () => {
-  if (!deferredPrompt) return
-  deferredPrompt.prompt()
-  await deferredPrompt.userChoice
-  deferredPrompt = null
-  document.getElementById("installBar").style.display = "none"
-})
-
-window.addEventListener("appinstalled", () => {
-  document.getElementById("installBar").style.display = "none"
-})
-
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch(() => {})
-  })
-}
-
-// ---------- Downloader Logic ----------
-
-let currentPlatform = "tiktok"
-
-const placeholders = {
-  tiktok: "Paste TikTok video link here",
-  instagram: "Paste Instagram post or reel link here",
-  pinterest: "Paste Pinterest pin link here",
-  youtube: "Paste YouTube video link here",
-  facebook: "Paste Facebook video link here"
-}
-
-const qualityLabels = {
-  hd_no_watermark: "Download HD (No Watermark)",
-  no_watermark: "Download (No Watermark)",
-  watermark: "Download (With Watermark)",
-  audio: "Download Audio Only (MP3)"
-}
-
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
-    tab.classList.add("active")
-    currentPlatform = tab.dataset.platform
-    document.getElementById("url").placeholder = placeholders[currentPlatform]
-    document.getElementById("result").style.display = "none"
-    document.getElementById("url").value = ""
-  })
-})
-
-async function search() {
-
-  const input = document.getElementById("url")
-  const url = input.value.trim()
-  const btn = document.getElementById("searchBtn")
-
-  if (!url) {
-    alert("Please paste a link first.")
-    return
+  // ===== 1) SERVICE WORKER REGISTER =====
+  // Browser ko batata hai ke service-worker.js file chalao (background caching ke liye).
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker
+        .register("/service-worker.js")
+        .then((reg) => console.log("Service worker registered:", reg.scope))
+        .catch((err) => console.error("SW registration failed:", err));
+    });
   }
 
-  const result = document.getElementById("result")
-  const message = document.getElementById("message")
-  const preview = document.getElementById("preview")
+  // ===== 2) INSTALL PROMPT HANDLE KARNA =====
+  // Chrome/Edge apne aap "beforeinstallprompt" event fire karte hain
+  // jab manifest + service worker sahi ho. Hum us event ko pakad kar
+  // apna custom "Install App" button dikhate hain.
+  let deferredPrompt;
+  const installBtn = document.getElementById("install-btn");
 
-  result.style.display = "block"
-  preview.style.display = "none"
-  message.classList.remove("success")
-  message.textContent = "Searching..."
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();          // browser ka default mini-bar chhupao
+    deferredPrompt = e;          // event save karlo
+    installBtn.style.display = "block"; // apna button dikhao
+  });
 
-  btn.disabled = true
-  btn.textContent = "Searching..."
+  installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();               // install popup dikhao
+    const { outcome } = await deferredPrompt.userChoice;
+    console.log("Install outcome:", outcome); // "accepted" ya "dismissed"
+    deferredPrompt = null;
+    installBtn.style.display = "none";
+  });
 
-  try {
-
-    const response = await fetch("/api/fetch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url })
-    })
-
-    const data = await response.json()
-
-    if (!data.success) {
-      message.textContent = data.error || "Could not find this content."
-      return
-    }
-
-    message.classList.add("success")
-    message.textContent = "Found! See preview below."
-
-    renderPreview(data)
-
-  } catch (error) {
-    message.textContent = "Server connection failed. Please try again."
-  } finally {
-    btn.disabled = false
-    btn.textContent = "Search"
-  }
-}
-
-function proxyDownloadUrl(mediaUrl, quality, extension) {
-  const filename = `downly-${quality}.${extension}`
-  return `/api/download-proxy?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`
-}
-
-function renderPreview(data) {
-
-  const preview = document.getElementById("preview")
-  preview.style.display = "block"
-  preview.innerHTML = ""
-
-  const titleEl = document.createElement("h3")
-  titleEl.textContent = data.title || "Preview"
-  preview.appendChild(titleEl)
-
-  const videos = data.medias.filter(m => m.type === "video")
-  const images = data.medias.filter(m => m.type === "image")
-  const audios = data.medias.filter(m => m.type === "audio")
-
-  const bestVideo =
-    videos.find(v => v.quality === "hd_no_watermark") ||
-    videos.find(v => v.quality === "no_watermark") ||
-    videos[0]
-
-  if (bestVideo) {
-    const video = document.createElement("video")
-    video.src = bestVideo.url
-    video.controls = true
-    if (data.thumbnail) video.poster = data.thumbnail
-    preview.appendChild(video)
-  } else if (images.length > 0) {
-    const img = document.createElement("img")
-    img.src = images[0].url
-    preview.appendChild(img)
-  } else if (data.thumbnail) {
-    const img = document.createElement("img")
-    img.src = data.thumbnail
-    preview.appendChild(img)
-  }
-
-  const buttons = document.createElement("div")
-  buttons.className = "buttons"
-
-  videos.forEach((v, i) => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(v.url, v.quality, v.extension)
-    a.className = i === 0 ? "dl" : "dl secondary"
-    a.textContent = qualityLabels[v.quality] || `Download Video (${v.quality})`
-    buttons.appendChild(a)
-  })
-
-  images.forEach((img, i) => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(img.url, `image-${i + 1}`, img.extension)
-    a.className = "dl secondary"
-    a.textContent = images.length > 1 ? `Download Image ${i + 1}` : "Download Image"
-    buttons.appendChild(a)
-  })
-
-  audios.forEach(aud => {
-    const a = document.createElement("a")
-    a.href = proxyDownloadUrl(aud.url, "audio", aud.extension)
-    a.className = "dl secondary"
-    a.textContent = qualityLabels.audio
-    buttons.appendChild(a)
-  })
-
-  preview.appendChild(buttons)
-}
-
-document.getElementById("url").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") search()
-})
-
+  // Jab app install ho jaye to button hamesha ke liye hide kardo
+  window.addEventListener("appinstalled", () => {
+    installBtn.style.display = "none";
+  });
 </script>
 
 </body>
