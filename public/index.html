@@ -6,9 +6,7 @@
 <title>Downly | Multi Social Video Tool</title>
 
 <style>
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -38,9 +36,7 @@ h1 {
   margin: 0 0 25px;
 }
 
-.pink {
-  color: #ff2855;
-}
+.pink { color: #ff2855; }
 
 .subtitle {
   color: #aaa;
@@ -68,9 +64,7 @@ input {
   transition: border-color 0.2s;
 }
 
-input:focus {
-  border-color: #ff2855;
-}
+input:focus { border-color: #ff2855; }
 
 .analyze {
   width: 100%;
@@ -86,14 +80,8 @@ input:focus {
   transition: opacity 0.2s;
 }
 
-.analyze:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.analyze:hover:not(:disabled) {
-  opacity: 0.9;
-}
+.analyze:disabled { opacity: 0.6; cursor: not-allowed; }
+.analyze:hover:not(:disabled) { opacity: 0.9; }
 
 .platforms {
   display: grid;
@@ -110,10 +98,7 @@ input:focus {
   text-align: center;
 }
 
-.result {
-  display: none;
-  margin-top: 30px;
-}
+.result { display: none; margin-top: 30px; }
 
 .message {
   padding: 18px;
@@ -123,10 +108,7 @@ input:focus {
   text-align: center;
 }
 
-.message.success {
-  background: #0f2818;
-  color: #9affb8;
-}
+.message.success { background: #0f2818; color: #9affb8; }
 
 .preview {
   margin-top: 25px;
@@ -136,9 +118,7 @@ input:focus {
   border-radius: 20px;
 }
 
-.preview h2 {
-  margin-top: 0;
-}
+.preview h2 { margin-top: 0; }
 
 .player {
   width: 100%;
@@ -158,6 +138,13 @@ input:focus {
   padding: 30px;
 }
 
+.note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
 .actions {
   display: flex;
   gap: 12px;
@@ -175,6 +162,8 @@ input:focus {
   cursor: pointer;
 }
 
+.download:disabled { opacity: 0.5; cursor: not-allowed; }
+
 .open {
   flex: 1;
   padding: 16px;
@@ -187,21 +176,10 @@ input:focus {
 }
 
 @media (max-width: 600px) {
-  .container {
-    padding: 35px 0;
-  }
-
-  .platforms {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .player {
-    min-height: 420px;
-  }
-
-  .actions {
-    flex-direction: column;
-  }
+  .container { padding: 35px 0; }
+  .platforms { grid-template-columns: 1fr 1fr; }
+  .player { min-height: 420px; }
+  .actions { flex-direction: column; }
 }
 </style>
 </head>
@@ -223,11 +201,7 @@ input:focus {
 
   <div class="box">
 
-    <input
-      id="url"
-      type="text"
-      placeholder="Paste TikTok, YouTube, Instagram, Facebook or Pinterest URL"
-    >
+    <input id="url" type="text" placeholder="Paste TikTok, YouTube, Instagram, Facebook or Pinterest URL">
 
     <button id="analyzeBtn" class="analyze" onclick="analyzeVideo()">
       Analyze
@@ -261,6 +235,10 @@ input:focus {
           Open Original
         </a>
       </div>
+
+      <div id="downloadNote" class="note" style="display:none;">
+        Direct download is not available for this platform. Use "Open Original" instead.
+      </div>
     </div>
 
   </div>
@@ -270,6 +248,7 @@ input:focus {
 <script>
 
 let currentUrl = ""
+let downloadAllowed = false
 
 async function analyzeVideo() {
 
@@ -289,6 +268,8 @@ async function analyzeVideo() {
   const previewBox = document.getElementById("previewBox")
   const player = document.getElementById("player")
   const openButton = document.getElementById("openButton")
+  const downloadButton = document.getElementById("downloadButton")
+  const downloadNote = document.getElementById("downloadNote")
 
   result.style.display = "block"
   previewBox.style.display = "none"
@@ -303,10 +284,7 @@ async function analyzeVideo() {
   try {
 
     const response = await fetch(`/api/analyze?url=${encodeURIComponent(url)}`)
-
-    if (!response.ok) {
-      throw new Error("Request failed")
-    }
+    if (!response.ok) throw new Error("Request failed")
 
     const data = await response.json()
 
@@ -319,17 +297,17 @@ async function analyzeVideo() {
     message.textContent = `${data.platform} detected. Preview loaded below.`
     previewBox.style.display = "block"
 
+    downloadAllowed = data.downloadSupported
+    downloadButton.style.display = downloadAllowed ? "block" : "none"
+    downloadNote.style.display = downloadAllowed ? "none" : "block"
+
     loadPreview(data)
 
   } catch (error) {
-
     message.textContent = "Server connection failed. Please try again."
-
   } finally {
-
     btn.disabled = false
     btn.textContent = "Analyze"
-
   }
 }
 
@@ -348,38 +326,24 @@ function loadPreview(data) {
   if (data.preview.type === "youtube") {
     title.textContent = "YouTube Preview"
     player.innerHTML = `
-      <iframe
-        class="player"
-        src="${data.preview.embedUrl}"
+      <iframe class="player" src="${data.preview.embedUrl}"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
+        allowfullscreen></iframe>
     `
     return
   }
 
   if (data.preview.type === "tiktok") {
-    title.textContent = "TikTok Preview"
-    player.innerHTML = `
-      <iframe
-        class="player"
-        src="${data.preview.embedUrl}"
-        allow="autoplay; encrypted-media;"
-        allowfullscreen>
-      </iframe>
-    `
+    title.textContent = "TikTok Video"
+    player.innerHTML = `<div class="placeholder">Preview not embeddable here. Tap "Download Video" or "Open Original" below.</div>`
     return
   }
 
   if (data.preview.type === "instagram") {
     title.textContent = "Instagram Preview"
     player.innerHTML = `
-      <blockquote
-        class="instagram-media"
-        data-instgrm-permalink="${data.originalUrl}"
-        data-instgrm-version="14"
-        style="width:100%; margin:0;">
-      </blockquote>
+      <blockquote class="instagram-media" data-instgrm-permalink="${data.originalUrl}"
+        data-instgrm-version="14" style="width:100%; margin:0;"></blockquote>
     `
     loadInstagram()
     return
@@ -389,14 +353,10 @@ function loadPreview(data) {
     title.textContent = "Facebook Preview"
     const encoded = encodeURIComponent(data.originalUrl)
     player.innerHTML = `
-      <iframe
-        class="player"
-        src="https://www.facebook.com/plugins/video.php?href=${encoded}&show_text=false"
-        scrolling="no"
-        frameborder="0"
+      <iframe class="player" src="https://www.facebook.com/plugins/video.php?href=${encoded}&show_text=false"
+        scrolling="no" frameborder="0"
         allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
+        allowfullscreen></iframe>
     `
     return
   }
@@ -414,46 +374,68 @@ function loadPreview(data) {
 }
 
 function loadInstagram() {
-  if (window.instgrm) {
-    window.instgrm.Embeds.process()
-    return
-  }
-
+  if (window.instgrm) { window.instgrm.Embeds.process(); return }
   const script = document.createElement("script")
   script.src = "https://www.instagram.com/embed.js"
   script.async = true
-  script.onload = () => {
-    if (window.instgrm) window.instgrm.Embeds.process()
-  }
+  script.onload = () => { if (window.instgrm) window.instgrm.Embeds.process() }
   document.body.appendChild(script)
 }
 
 function loadPinterest() {
-  if (window.PinUtils) {
-    window.PinUtils.build()
-    return
-  }
-
+  if (window.PinUtils) { window.PinUtils.build(); return }
   const script = document.createElement("script")
   script.src = "https://assets.pinterest.com/js/pinit.js"
   script.async = true
   document.body.appendChild(script)
 }
 
-function downloadVideo() {
+async function downloadVideo() {
+
   if (!currentUrl) {
     alert("Analyze a video first.")
     return
   }
 
-  alert("Preview system is connected. Direct social-media downloading requires an authorized media source.")
+  if (!downloadAllowed) {
+    alert("Direct download is not available for this platform yet.")
+    return
+  }
+
+  const btn = document.getElementById("downloadButton")
+  const originalText = btn.textContent
+
+  btn.disabled = true
+  btn.textContent = "Fetching video..."
+
+  try {
+
+    const response = await fetch(`/api/download?url=${encodeURIComponent(currentUrl)}`)
+    const data = await response.json()
+
+    if (!data.success) {
+      alert(data.error || "Could not download this video.")
+      return
+    }
+
+    const link = document.createElement("a")
+    link.href = data.downloadUrl
+    link.download = (data.title || "downly-video").replace(/[^a-z0-9]/gi, "_") + ".mp4"
+    link.target = "_blank"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+
+  } catch (error) {
+    alert("Download failed. Please try again.")
+  } finally {
+    btn.disabled = false
+    btn.textContent = originalText
+  }
 }
 
-// Allow pressing Enter in the input to trigger analyze
 document.getElementById("url").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") {
-    analyzeVideo()
-  }
+  if (e.key === "Enter") analyzeVideo()
 })
 
 </script>
