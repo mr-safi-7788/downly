@@ -4,271 +4,174 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Downly | Social Video Tool</title>
+<title>Downly | Multi Social Video Tool</title>
 
 <style>
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
+  margin: 0;
   font-family: Arial, sans-serif;
-  background: #080808;
-  color: #fff;
+  background: #050505;
+  color: white;
 }
 
 .container {
-  width: 92%;
-  max-width: 1050px;
+  width: min(900px, 94%);
   margin: auto;
-}
-
-header {
-  height: 75px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid #222;
-}
-
-.logo {
-  font-size: 28px;
-  font-weight: 800;
-}
-
-.logo span {
-  color: #ff3158;
-}
-
-.hero {
-  text-align: center;
-  padding: 75px 0 50px;
+  padding: 50px 0;
 }
 
 .badge {
   display: inline-block;
-  padding: 8px 15px;
+  padding: 12px 24px;
   border: 1px solid #333;
-  border-radius: 50px;
-  color: #aaa;
-  font-size: 13px;
+  border-radius: 30px;
+  color: #ddd;
   margin-bottom: 25px;
 }
 
 h1 {
-  font-size: clamp(42px, 7vw, 72px);
-  line-height: 1;
-  letter-spacing: -3px;
+  font-size: clamp(42px, 8vw, 80px);
+  line-height: 0.95;
+  margin: 0 0 25px;
 }
 
-h1 span {
-  color: #ff3158;
+.pink {
+  color: #ff2855;
 }
 
 .subtitle {
-  max-width: 650px;
-  margin: 22px auto 35px;
-  color: #888;
-  line-height: 1.7;
+  color: #aaa;
+  font-size: 20px;
+  line-height: 1.6;
 }
 
-.search-box {
-  max-width: 850px;
-  margin: auto;
-  padding: 10px;
-  background: #111;
+.box {
+  margin-top: 35px;
+  padding: 18px;
   border: 1px solid #292929;
-  border-radius: 18px;
-}
-
-.input-row {
-  display: flex;
-  gap: 10px;
+  border-radius: 25px;
+  background: #0c0c0c;
 }
 
 input {
-  flex: 1;
-  height: 58px;
-  background: #1b1b1b;
+  width: 100%;
+  padding: 18px;
+  border-radius: 15px;
+  border: 1px solid #333;
+  background: #151515;
   color: white;
-  border: 1px solid #292929;
-  border-radius: 12px;
+  font-size: 16px;
   outline: none;
-  padding: 0 18px;
-  font-size: 15px;
-}
-
-input:focus {
-  border-color: #ff3158;
 }
 
 .analyze {
-  width: 140px;
+  width: 100%;
+  margin-top: 12px;
+  padding: 18px;
   border: 0;
-  border-radius: 12px;
-  background: #ff3158;
+  border-radius: 15px;
+  background: #ff2855;
   color: white;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 }
 
 .platforms {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin-top: 10px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 15px;
 }
 
 .platform {
-  padding: 11px;
-  background: #151515;
-  border: 1px solid #252525;
-  border-radius: 10px;
-  color: #999;
+  padding: 17px;
+  border-radius: 15px;
+  background: #111;
+  border: 1px solid #292929;
+  text-align: center;
 }
 
 .result {
-  max-width: 850px;
-  margin: 20px auto;
-  padding: 18px;
-  background: #111;
-  border: 1px solid #292929;
-  border-radius: 16px;
   display: none;
+  margin-top: 30px;
 }
 
-.result.show {
-  display: block;
-}
-
-.result h2 {
-  margin-bottom: 6px;
-}
-
-.result-info {
-  color: #888;
-  margin-bottom: 15px;
+.message {
+  padding: 18px;
+  border-radius: 15px;
+  background: #281017;
+  color: #ff9aae;
+  text-align: center;
 }
 
 .preview {
+  margin-top: 25px;
+  padding: 20px;
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 20px;
+}
+
+.preview h2 {
+  margin-top: 0;
+}
+
+.player {
   width: 100%;
+  min-height: 500px;
+  border: 0;
+  border-radius: 15px;
   background: #000;
-  border-radius: 12px;
-  overflow: hidden;
-  min-height: 250px;
+}
+
+.actions {
   display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.preview iframe {
-  width: 100%;
-  height: 480px;
-  border: 0;
-}
-
-.preview video {
-  width: 100%;
-  max-height: 600px;
-  display: block;
-}
-
-.preview-message {
-  padding: 50px 20px;
-  text-align: center;
-  color: #777;
-}
-
-.download-btn {
-  width: 100%;
-  height: 52px;
+  gap: 12px;
   margin-top: 15px;
+}
+
+.download {
+  flex: 1;
+  padding: 16px;
   border: 0;
-  border-radius: 10px;
+  border-radius: 14px;
   background: white;
   color: black;
   font-weight: bold;
   cursor: pointer;
 }
 
-.download-btn:hover {
-  background: #ddd;
-}
-
-.error {
-  max-width: 850px;
-  margin: 15px auto;
-  padding: 13px;
-  background: #241116;
-  border: 1px solid #54212d;
-  color: #ff9aaa;
-  border-radius: 10px;
-  display: none;
-}
-
-.info {
-  border-top: 1px solid #222;
-  padding: 70px 0;
-}
-
-.info h2 {
+.open {
+  flex: 1;
+  padding: 16px;
+  border-radius: 14px;
+  background: #181818;
+  border: 1px solid #333;
+  color: white;
   text-align: center;
-  margin-bottom: 30px;
+  text-decoration: none;
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-}
-
-.card {
-  padding: 25px;
-  background: #111;
-  border: 1px solid #242424;
-  border-radius: 15px;
-}
-
-.card h3 {
-  margin-bottom: 10px;
-}
-
-.card p {
-  color: #777;
-  line-height: 1.6;
-  font-size: 14px;
-}
-
-footer {
-  border-top: 1px solid #222;
-  padding: 30px 0;
-  text-align: center;
-  color: #555;
-  font-size: 12px;
-}
-
-@media(max-width:700px) {
-
-  .input-row {
-    flex-direction: column;
-  }
-
-  .analyze {
-    width: 100%;
-    height: 52px;
+@media(max-width: 600px) {
+  .container {
+    padding: 35px 0;
   }
 
   .platforms {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
   }
 
-  .cards {
-    grid-template-columns: 1fr;
+  .player {
+    min-height: 420px;
   }
 
-  .preview iframe {
-    height: 400px;
+  .actions {
+    flex-direction: column;
   }
 }
 </style>
@@ -278,44 +181,30 @@ footer {
 
 <div class="container">
 
-<header>
-  <div class="logo">
-    Downly<span>.</span>
-  </div>
-</header>
-
-<section class="hero">
-
   <div class="badge">
     Multi Social Video Tool
   </div>
 
   <h1>
-    Preview your
-    <span>video</span>
+    Download your<br>
+    <span class="pink">videos</span> easily.
   </h1>
 
   <p class="subtitle">
-    Paste a supported video URL and preview the content directly.
+    Paste your video URL below and preview supported social media content.
   </p>
 
-  <div class="search-box">
+  <div class="box">
 
-    <div class="input-row">
+    <input
+      id="url"
+      type="text"
+      placeholder="Paste TikTok, YouTube, Instagram, Facebook or Pinterest URL"
+    >
 
-      <input
-        id="url"
-        type="url"
-        placeholder="Paste YouTube, TikTok, Instagram or Pinterest URL..."
-      >
-
-      <button
-        class="analyze"
-        onclick="analyzeURL()">
-        Analyze
-      </button>
-
-    </div>
+    <button class="analyze" onclick="analyzeVideo()">
+      Analyze
+    </button>
 
     <div class="platforms">
       <div class="platform">YouTube</div>
@@ -327,385 +216,257 @@ footer {
 
   </div>
 
-  <div id="error" class="error"></div>
+  <div id="result" class="result">
 
-</section>
+    <div id="message" class="message"></div>
 
+    <div id="previewBox" class="preview">
+      <h2 id="previewTitle">Video Preview</h2>
 
-<section id="result" class="result">
+      <div id="player"></div>
 
-  <h2 id="platformName"></h2>
+      <div class="actions">
 
-  <div id="resultInfo" class="result-info"></div>
+        <button
+          id="downloadButton"
+          class="download"
+          onclick="downloadVideo()"
+        >
+          Download Video
+        </button>
 
-  <div id="preview" class="preview"></div>
+        <a
+          id="openButton"
+          class="open"
+          href="#"
+          target="_blank"
+        >
+          Open Original
+        </a>
 
-  <button
-    id="downloadBtn"
-    class="download-btn"
-    onclick="downloadAuthorizedFile()">
-    Download authorized file
-  </button>
-
-</section>
-
-
-<section class="info">
-
-  <h2>How it works</h2>
-
-  <div class="cards">
-
-    <div class="card">
-      <h3>01. Paste</h3>
-      <p>
-        Paste your video URL into the search box.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>02. Analyze</h3>
-      <p>
-        Downly identifies the supported platform.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>03. Preview</h3>
-      <p>
-        Available official players are displayed directly.
-      </p>
-    </div>
-
-    <div class="card">
-      <h3>04. Download</h3>
-      <p>
-        Authorized downloadable media can be downloaded.
-      </p>
+      </div>
     </div>
 
   </div>
 
-</section>
-
-
-<footer>
-  © 2026 Downly
-</footer>
-
 </div>
-
 
 <script>
 
-let currentURL = "";
-let currentPlatform = "";
+let currentUrl = ""
 
+async function analyzeVideo() {
 
-function getYouTubeID(url) {
-
-  try {
-
-    const parsed = new URL(url);
-
-    if (parsed.hostname.includes("youtu.be")) {
-      return parsed.pathname.substring(1);
-    }
-
-    if (parsed.searchParams.get("v")) {
-      return parsed.searchParams.get("v");
-    }
-
-    const match =
-      parsed.pathname.match(/\/(shorts|embed)\/([^/]+)/);
-
-    if (match) {
-      return match[2];
-    }
-
-  } catch {}
-
-  return null;
-}
-
-
-function getTikTokID(url) {
-
-  const match =
-    url.match(/\/video\/(\d+)/);
-
-  return match ? match[1] : null;
-}
-
-
-function detectPlatform(url) {
-
-  try {
-
-    const host =
-      new URL(url).hostname.toLowerCase();
-
-    if (
-      host.includes("youtube.com") ||
-      host.includes("youtu.be")
-    ) {
-      return "YouTube";
-    }
-
-    if (host.includes("tiktok.com")) {
-      return "TikTok";
-    }
-
-    if (host.includes("instagram.com")) {
-      return "Instagram";
-    }
-
-    if (
-      host.includes("pinterest.com") ||
-      host === "pin.it"
-    ) {
-      return "Pinterest";
-    }
-
-    if (host.includes("facebook.com") ||
-        host.includes("fb.watch")) {
-      return "Facebook";
-    }
-
-    return null;
-
-  } catch {
-
-    return null;
-
-  }
-}
-
-
-async function analyzeURL() {
-
-  const input =
-    document.getElementById("url");
-
-  const error =
-    document.getElementById("error");
-
-  const result =
-    document.getElementById("result");
-
-  const preview =
-    document.getElementById("preview");
-
-  const url =
-    input.value.trim();
-
-  error.style.display = "none";
-
-  result.classList.remove("show");
+  const input = document.getElementById("url")
+  const url = input.value.trim()
 
   if (!url) {
-
-    error.textContent =
-      "Please paste a video URL.";
-
-    error.style.display =
-      "block";
-
-    return;
+    alert("Please paste a video URL first.")
+    return
   }
 
+  currentUrl = url
 
-  const platform =
-    detectPlatform(url);
+  const result = document.getElementById("result")
+  const message = document.getElementById("message")
+  const player = document.getElementById("player")
+  const openButton = document.getElementById("openButton")
 
+  result.style.display = "block"
 
-  if (!platform) {
+  message.textContent = "Analyzing video..."
+  player.innerHTML = ""
 
-    error.textContent =
-      "This URL is not supported.";
+  openButton.href = url
 
-    error.style.display =
-      "block";
+  try {
 
-    return;
-  }
+    const response = await fetch(
+      `/api/analyze?url=${encodeURIComponent(url)}`
+    )
 
+    const data = await response.json()
 
-  currentURL = url;
-  currentPlatform = platform;
-
-
-  document.getElementById(
-    "platformName"
-  ).textContent =
-    platform + " Preview";
-
-
-  document.getElementById(
-    "resultInfo"
-  ).textContent =
-    "Preview loaded from the platform's official player when available.";
-
-
-  preview.innerHTML = "";
-
-
-  if (platform === "YouTube") {
-
-    const id =
-      getYouTubeID(url);
-
-    if (!id) {
-
-      showPreviewMessage(
-        "Could not read the YouTube video ID."
-      );
-
-    } else {
-
-      preview.innerHTML = `
-        <iframe
-          src="https://www.youtube.com/embed/${encodeURIComponent(id)}"
-          title="YouTube video"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
-      `;
-
+    if (!data.success) {
+      message.textContent = data.error || "Unable to analyze this URL."
+      return
     }
 
+    message.textContent =
+      `${data.platform} detected. Preview is being loaded.`
+
+    loadPreview(data)
+
+  } catch (error) {
+
+    message.textContent =
+      "Server connection failed. Please try again."
+
+  }
+}
+
+function loadPreview(data) {
+
+  const player = document.getElementById("player")
+  const title = document.getElementById("previewTitle")
+
+  player.innerHTML = ""
+
+  if (!data.preview) {
+
+    player.innerHTML = `
+      <div style="
+        min-height:300px;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        color:#888;
+        text-align:center;
+        padding:30px;
+      ">
+        Preview is not available for this URL.
+      </div>
+    `
+
+    return
   }
 
-  else if (platform === "TikTok") {
+  if (data.preview.type === "youtube") {
 
-    const id =
-      getTikTokID(url);
+    title.textContent = "YouTube Preview"
 
-    if (!id) {
+    player.innerHTML = `
+      <iframe
+        class="player"
+        src="${data.preview.embedUrl}"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    `
 
-      showPreviewMessage(
-        "Please use a direct TikTok video URL."
-      );
+    return
+  }
 
-    } else {
+  if (data.preview.type === "tiktok") {
 
-      preview.innerHTML = `
-        <iframe
-          src="https://www.tiktok.com/player/v1/${id}"
-          title="TikTok video"
-          allow="fullscreen">
-        </iframe>
-      `;
+    title.textContent = "TikTok Preview"
 
+    player.innerHTML = `
+      <iframe
+        class="player"
+        src="${data.preview.embedUrl}"
+        allow="autoplay; encrypted-media;"
+        allowfullscreen>
+      </iframe>
+    `
+
+    return
+  }
+
+  if (data.preview.type === "instagram") {
+
+    title.textContent = "Instagram Preview"
+
+    player.innerHTML = `
+      <blockquote
+        class="instagram-media"
+        data-instgrm-permalink="${data.originalUrl}"
+        data-instgrm-version="14"
+        style="width:100%; margin:0;">
+      </blockquote>
+    `
+
+    loadInstagram()
+
+    return
+  }
+
+  if (data.preview.type === "facebook") {
+
+    title.textContent = "Facebook Preview"
+
+    const encoded = encodeURIComponent(data.originalUrl)
+
+    player.innerHTML = `
+      <iframe
+        class="player"
+        src="https://www.facebook.com/plugins/video.php?href=${encoded}&show_text=false"
+        scrolling="no"
+        frameborder="0"
+        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    `
+
+    return
+  }
+
+  if (data.preview.type === "pinterest") {
+
+    title.textContent = "Pinterest Preview"
+
+    player.innerHTML = `
+      <div
+        class="pin"
+        data-pin-do="embedPin"
+        data-pin-width="large"
+        data-pin-terse="true">
+        <a href="${data.originalUrl}">Pinterest Video</a>
+      </div>
+    `
+
+    loadPinterest()
+
+    return
+  }
+}
+
+function loadInstagram() {
+
+  if (window.instgrm) {
+    window.instgrm.Embeds.process()
+    return
+  }
+
+  const script = document.createElement("script")
+
+  script.src = "https://www.instagram.com/embed.js"
+  script.async = true
+
+  script.onload = () => {
+    if (window.instgrm) {
+      window.instgrm.Embeds.process()
     }
-
   }
 
-  else if (platform === "Instagram") {
-
-    preview.innerHTML = `
-      <div class="preview-message">
-        Instagram's official embed can be used for public
-        posts and reels. Direct media downloading requires
-        an authorized Instagram media source.
-        <br><br>
-        <a
-          href="${escapeHTML(url)}"
-          target="_blank"
-          style="color:#ff3158">
-          Open Instagram video
-        </a>
-      </div>
-    `;
-
-  }
-
-  else if (platform === "Pinterest") {
-
-    preview.innerHTML = `
-      <div class="preview-message">
-        Pinterest preview requires the official Pin embed
-        or an authorized media source.
-        <br><br>
-        <a
-          href="${escapeHTML(url)}"
-          target="_blank"
-          style="color:#ff3158">
-          Open Pinterest video
-        </a>
-      </div>
-    `;
-
-  }
-
-  else if (platform === "Facebook") {
-
-    preview.innerHTML = `
-      <div class="preview-message">
-        Facebook preview requires the official Facebook
-        video embed or an authorized media source.
-        <br><br>
-        <a
-          href="${escapeHTML(url)}"
-          target="_blank"
-          style="color:#ff3158">
-          Open Facebook video
-        </a>
-      </div>
-    `;
-
-  }
-
-
-  result.classList.add("show");
-
+  document.body.appendChild(script)
 }
 
+function loadPinterest() {
 
-function showPreviewMessage(message) {
+  if (window.PinUtils) {
+    window.PinUtils.build()
+    return
+  }
 
-  document.getElementById(
-    "preview"
-  ).innerHTML = `
-    <div class="preview-message">
-      ${message}
-    </div>
-  `;
+  const script = document.createElement("script")
 
+  script.src = "https://assets.pinterest.com/js/pinit.js"
+  script.async = true
+
+  document.body.appendChild(script)
 }
 
+function downloadVideo() {
 
-function escapeHTML(value) {
+  if (!currentUrl) {
+    alert("Analyze a video first.")
+    return
+  }
 
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
-
-}
-
-
-async function downloadAuthorizedFile() {
-
-  const error =
-    document.getElementById("error");
-
-  error.style.display = "none";
-
-  /*
-    This button is intentionally connected only to
-    an authorized backend/media source.
-
-    It does not bypass platform restrictions.
-  */
-
-  error.textContent =
-    "The preview is working. The download backend still needs to be connected to an authorized media source.";
-
-  error.style.display =
-    "block";
-
+  alert(
+    "Preview system is connected. Direct social-media downloading requires an authorized media source."
+  )
 }
 
 </script>
