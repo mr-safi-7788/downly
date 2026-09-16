@@ -3,6 +3,7 @@ const path = require("path")
 
 const app = express()
 const PORT = process.env.PORT || 10000
+const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "public")))
@@ -16,114 +17,54 @@ function isValidUrl(url) {
   }
 }
 
-// ---------- TikTok ----------
-
-app.get("/api/tiktok", async (req, res) => {
-  const url = req.query.url
+app.post("/api/fetch", async (req, res) => {
+  const url = req.body && req.body.url
 
   if (!url || !isValidUrl(url)) {
-    return res.status(400).json({ success: false, error: "Valid TikTok URL required" })
+    return res.status(400).json({ success: false, error: "Valid URL required" })
+  }
+
+  if (!RAPIDAPI_KEY) {
+    return res.status(500).json({ success: false, error: "Server is missing API key configuration" })
   }
 
   try {
-    const apiRes = await fetch(`https://www.tikwm.com/api/?url=${encodeURIComponent(url)}`)
+    const apiRes = await fetch("https://social-download-all-in-one.p.rapidapi.com/v1/social/autolink", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-rapidapi-host": "social-download-all-in-one.p.rapidapi.com",
+        "x-rapidapi-key": RAPIDAPI_KEY
+      },
+      body: JSON.stringify({ url })
+    })
+
     const data = await apiRes.json()
 
-    if (data.code !== 0 || !data.data) {
-      return res.status(400).json({ success: false, error: "Could not fetch this TikTok video" })
-    }
-
-    res.json({
-      success: true,
-      title: data.data.title || "TikTok Video",
-      cover: data.data.cover,
-      noWatermarkUrl: data.data.hdplay || data.data.play,
-      watermarkUrl: data.data.wmplay || data.data.play,
-      audioUrl: data.data.music
-    })
-
-  } catch (err) {
-    console.error("TikTok error:", err)
-    res.status(500).json({ success: false, error: "Failed to fetch TikTok video" })
-  }
-})
-
-// ---------- Pinterest ----------
-
-app.get("/api/pinterest", async (req, res) => {
-  const url = req.query.url
-
-  if (!url || !isValidUrl(url)) {
-    return res.status(400).json({ success: false, error: "Valid Pinterest URL required" })
-  }
-
-  try {
-    const pageRes = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
-    })
-    const html = await pageRes.text()
-
-    const videoMatch = html.match(/<meta property="og:video" content="([^"]+)"/)
-    const imageMatch = html.match(/<meta property="og:image" content="([^"]+)"/)
-    const titleMatch = html.match(/<meta property="og:title" content="([^"]+)"/)
-
-    if (!videoMatch && !imageMatch) {
-      return res.status(400).json({ success: false, error: "Could not find media on this pin" })
-    }
-
-    res.json({
-      success: true,
-      title: titleMatch ? titleMatch[1] : "Pinterest Pin",
-      type: videoMatch ? "video" : "image",
-      mediaUrl: videoMatch ? videoMatch[1] : imageMatch[1]
-    })
-
-  } catch (err) {
-    console.error("Pinterest error:", err)
-    res.status(500).json({ success: false, error: "Failed to fetch Pinterest pin" })
-  }
-})
-
-// ---------- Instagram ----------
-
-app.get("/api/instagram", async (req, res) => {
-  const url = req.query.url
-
-  if (!url || !isValidUrl(url)) {
-    return res.status(400).json({ success: false, error: "Valid Instagram URL required" })
-  }
-
-  try {
-    const pageRes = await fetch(url, {
-      headers: { "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)" }
-    })
-    const html = await pageRes.text()
-
-    const videoMatch = html.match(/<meta property="og:video" content="([^"]+)"/)
-    const imageMatch = html.match(/<meta property="og:image" content="([^"]+)"/)
-    const titleMatch = html.match(/<meta property="og:title" content="([^"]+)"/)
-
-    if (!videoMatch && !imageMatch) {
+    if (data.error || !data.medias || data.medias.length === 0) {
       return res.status(400).json({
         success: false,
-        error: "Could not fetch this post. Instagram sometimes blocks access to certain content."
+        error: "Could not fetch this link. It may be private, deleted, or unsupported."
       })
     }
 
     res.json({
       success: true,
-      title: titleMatch ? titleMatch[1] : "Instagram Post",
-      type: videoMatch ? "video" : "image",
-      mediaUrl: videoMatch ? videoMatch[1] : imageMatch[1]
+      title: data.title || data.description || "Media",
+      thumbnail: data.thumbnail || data.cover || data.picture || null,
+      medias: data.medias.map(m => ({
+        url: m.url,
+        type: m.type,
+        quality: m.quality || m.type,
+        extension: m.extension || (m.type === "video" ? "mp4" : m.type === "audio" ? "mp3" : "jpg")
+      }))
     })
 
   } catch (err) {
-    console.error("Instagram error:", err)
-    res.status(500).json({ success: false, error: "Failed to fetch Instagram post" })
+    console.error("Fetch error:", err)
+    res.status(500).json({ success: false, error: "Failed to fetch this content. Try again." })
   }
 })
-
-// ---------- Fallback ----------
 
 app.use((req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
@@ -137,3 +78,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Downly is running on port ${PORT}`)
 })
+                                   
