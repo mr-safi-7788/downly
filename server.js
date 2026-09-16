@@ -129,7 +129,7 @@ app.get("/api/analyze", async (req, res) => {
   res.json(result)
 })
 
-app.get("*", (req, res) => {
+app.use((req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"))
 })
 
