@@ -63,6 +63,16 @@
   .search-box input{flex:1;padding:14px;border:none;border-radius:8px 0 0 8px;font-size:15px}
   .search-box button{padding:14px 24px;background:var(--red);color:#fff;border:none;border-radius:0 8px 8px 0;cursor:pointer;font-weight:bold}
   #install-btn{display:none;margin:0 auto 30px;background:var(--red);color:#fff;border:none;padding:12px 22px;border-radius:8px;font-size:15px;cursor:pointer}
+  .result-box{max-width:600px;margin:0 auto 40px;padding:0 20px;display:none}
+  .result-box.show{display:block}
+  .result-card{background:#111;border-radius:10px;padding:16px}
+  .result-card img{width:100%;border-radius:8px;margin-bottom:12px}
+  .result-card h3{font-size:15px;margin-bottom:12px}
+  .download-link{display:block;background:var(--red);color:#fff;text-decoration:none;text-align:center;padding:12px;border-radius:8px;margin-bottom:8px;font-weight:bold}
+  .error-msg{color:var(--red);text-align:center;margin:20px;display:none}
+  .error-msg.show{display:block}
+  .loading{text-align:center;margin:20px;display:none;color:#aaa}
+  .loading.show{display:block}
   .blog-section{max-width:900px;margin:50px auto;padding:0 20px}
   .blog-section h2{margin-bottom:16px;border-left:4px solid var(--red);padding-left:10px}
   .blog-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
@@ -89,8 +99,15 @@
 </nav>
 
 <div class="search-box">
-  <input type="text" placeholder="Paste video link here...">
-  <button>Search</button>
+  <input type="text" id="url-input" placeholder="Paste video link here...">
+  <button id="search-btn">Search</button>
+</div>
+
+<div class="loading" id="loading">Fetching your media, please wait...</div>
+<div class="error-msg" id="error-msg"></div>
+
+<div class="result-box" id="result-box">
+  <div class="result-card" id="result-card"></div>
 </div>
 
 <!-- Install App button — sirf tab dikhta hai jab browser install ka mauka de -->
@@ -119,7 +136,6 @@
 
 <script>
   // ===== 1) SERVICE WORKER REGISTER =====
-  // Browser ko batata hai ke service-worker.js file chalao (background caching ke liye).
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
       navigator.serviceWorker
@@ -130,30 +146,92 @@
   }
 
   // ===== 2) INSTALL PROMPT HANDLE KARNA =====
-  // Chrome/Edge apne aap "beforeinstallprompt" event fire karte hain
-  // jab manifest + service worker sahi ho. Hum us event ko pakad kar
-  // apna custom "Install App" button dikhate hain.
   let deferredPrompt;
   const installBtn = document.getElementById("install-btn");
 
   window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();          // browser ka default mini-bar chhupao
-    deferredPrompt = e;          // event save karlo
-    installBtn.style.display = "block"; // apna button dikhao
+    e.preventDefault();
+    deferredPrompt = e;
+    installBtn.style.display = "block";
   });
 
   installBtn.addEventListener("click", async () => {
     if (!deferredPrompt) return;
-    deferredPrompt.prompt();               // install popup dikhao
+    deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    console.log("Install outcome:", outcome); // "accepted" ya "dismissed"
+    console.log("Install outcome:", outcome);
     deferredPrompt = null;
     installBtn.style.display = "none";
   });
 
-  // Jab app install ho jaye to button hamesha ke liye hide kardo
   window.addEventListener("appinstalled", () => {
     installBtn.style.display = "none";
+  });
+
+  // ===== 3) SEARCH / FETCH MEDIA =====
+  const urlInput = document.getElementById("url-input");
+  const searchBtn = document.getElementById("search-btn");
+  const loading = document.getElementById("loading");
+  const errorMsg = document.getElementById("error-msg");
+  const resultBox = document.getElementById("result-box");
+  const resultCard = document.getElementById("result-card");
+
+  async function fetchMedia() {
+    const url = urlInput.value.trim();
+
+    errorMsg.classList.remove("show");
+    resultBox.classList.remove("show");
+
+    if (!url) {
+      errorMsg.textContent = "Pehle koi link paste karo.";
+      errorMsg.classList.add("show");
+      return;
+    }
+
+    loading.classList.add("show");
+
+    try {
+      const res = await fetch("/api/fetch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await res.json();
+      loading.classList.remove("show");
+
+      if (!data.success) {
+        errorMsg.textContent = data.error || "Kuch ghalat ho gaya, dobara try karo.";
+        errorMsg.classList.add("show");
+        return;
+      }
+
+      let html = "";
+      if (data.thumbnail) {
+        html += `<img src="${data.thumbnail}" alt="thumbnail">`;
+      }
+      html += `<h3>${data.title || "Media"}</h3>`;
+
+      data.medias.forEach((m, i) => {
+        const filename = `downly-${Date.now()}-${i}.${m.extension}`;
+        const proxyUrl = `/api/download-proxy?url=${encodeURIComponent(m.url)}&filename=${encodeURIComponent(filename)}`;
+        html += `<a class="download-link" href="${proxyUrl}">Download ${m.quality || m.type}</a>`;
+      });
+
+      resultCard.innerHTML = html;
+      resultBox.classList.add("show");
+
+    } catch (err) {
+      loading.classList.remove("show");
+      errorMsg.textContent = "Server se connect nahi ho saka. Dobara try karo.";
+      errorMsg.classList.add("show");
+      console.error(err);
+    }
+  }
+
+  searchBtn.addEventListener("click", fetchMedia);
+  urlInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") fetchMedia();
   });
 </script>
 
