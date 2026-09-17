@@ -14,7 +14,7 @@ gtag('config', 'G-NNCMWM4CG7');
 </script>
 
 <!-- SEO -->
-<title>Dowmly | TikTok, Instagram, Pinterest, YouTube & Facebook Video Downloader</title>
+<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Video Downloader</title>
 
 <meta name="description"
 content="Free online tool to download videos from TikTok, Instagram, Pinterest, YouTube and Facebook. Fast, simple and easy to use.">
@@ -26,7 +26,7 @@ content="tiktok downloader, instagram downloader, pinterest downloader, youtube 
 
 <!-- OPEN GRAPH -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Dowmly | Video Downloader">
+<meta property="og:title" content="Downly | Video Downloader">
 <meta property="og:description"
 content="Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook.">
 <meta property="og:image"
@@ -36,7 +36,7 @@ content="https://downly-88cv.onrender.com/">
 
 <!-- TWITTER -->
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dowmly | Video Downloader">
+<meta name="twitter:title" content="Downly | Video Downloader">
 <meta name="twitter:description"
 content="Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook.">
 <meta name="twitter:image"
@@ -58,7 +58,7 @@ href="/icons/icon-180x180.png">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Dowmly">
+<meta name="apple-mobile-web-app-title" content="Downly">
 
 <!-- FONTS -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,7 +72,7 @@ rel="stylesheet">
 {
   "@context":"https://schema.org",
   "@type":"WebApplication",
-  "name":"Dowmly",
+  "name":"Downly",
   "url":"https://downly-88cv.onrender.com/",
   "applicationCategory":"MultimediaApplication",
   "operatingSystem":"Any",
@@ -220,6 +220,35 @@ nav {
   line-height: 1.7;
 }
 
+/* ================= TABS ================= */
+
+.tabs {
+  max-width: 760px;
+  margin: 0 auto 14px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.tab {
+  padding: 12px 6px;
+  border-radius: 12px;
+  background: #111;
+  border: 1px solid #292929;
+  text-align: center;
+  cursor: pointer;
+  font-weight: 700;
+  color: #999;
+  font-size: 13px;
+  transition: 0.2s;
+}
+
+.tab.active {
+  background: #e50000;
+  color: white;
+  border-color: #e50000;
+}
+
 /* ================= SEARCH ================= */
 
 .search-box {
@@ -275,6 +304,7 @@ nav {
   margin-top: 22px;
   color: #777;
   font-size: 13px;
+  text-align: center;
 }
 
 /* ================= LOADING ================= */
@@ -350,7 +380,8 @@ nav {
 .result-thumb {
   width: 100%;
   max-height: 420px;
-  object-fit: cover;
+  object-fit: contain;
+  background: #000;
   border-radius: 12px;
   display: block;
   margin-bottom: 18px;
@@ -378,11 +409,23 @@ nav {
   text-align: center;
   font-weight: 700;
   transition: 0.2s;
+  border: 0;
+  cursor: pointer;
+}
+
+.download-link.secondary {
+  background: #181818;
+  border: 1px solid #333;
+  color: white;
 }
 
 .download-link:hover {
   background: #ff1717;
   transform: translateY(-1px);
+}
+
+.download-link.secondary:hover {
+  background: #232323;
 }
 
 .no-media {
@@ -585,6 +628,10 @@ footer p {
     font-size: 15px;
   }
 
+  .tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
   .search-box {
     flex-direction: column;
     padding: 8px;
@@ -626,7 +673,7 @@ footer p {
   <div class="header-inner">
 
     <a href="/" class="logo">
-      All media <span>dowmly</span>
+      Down<span>ly</span>
     </a>
 
     <select id="language-select" class="language-select">
@@ -667,8 +714,16 @@ footer p {
 
   <p>
     Download videos from TikTok, Instagram, Pinterest,
-    YouTube and Facebook using Dowmly.
+    YouTube and Facebook using Downly.
   </p>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-platform="tiktok">TikTok</div>
+    <div class="tab" data-platform="instagram">Instagram</div>
+    <div class="tab" data-platform="pinterest">Pinterest</div>
+    <div class="tab" data-platform="youtube">YouTube</div>
+    <div class="tab" data-platform="facebook">Facebook</div>
+  </div>
 
   <div class="search-box">
 
@@ -738,7 +793,7 @@ footer p {
 <section class="features">
 
   <h2 class="features-title">
-    Why Use Dowmly?
+    Why Use Downly?
   </h2>
 
   <div class="feature-grid">
@@ -763,7 +818,7 @@ footer p {
       <h3>Mobile Friendly</h3>
 
       <p>
-        Dowmly works smoothly on phones, tablets
+        Downly works smoothly on phones, tablets
         and desktop browsers.
       </p>
 
@@ -791,7 +846,7 @@ footer p {
 <section class="blog-section" id="blog">
 
   <h2 class="blog-title">
-    Dowmly Blog
+    Downly Blog
   </h2>
 
   <div class="blog-grid">
@@ -803,12 +858,12 @@ footer p {
       </h3>
 
       <p>
-        Learn how to use Dowmly to fetch supported
+        Learn how to use Downly to fetch supported
         TikTok media from a shared link.
       </p>
 
       <a href="#downloader">
-        Try Dowmly →
+        Try Downly →
       </a>
 
     </article>
@@ -820,12 +875,12 @@ footer p {
       </h3>
 
       <p>
-        Paste an Instagram link into Dowmly and
+        Paste an Instagram link into Downly and
         check the available media options.
       </p>
 
       <a href="#downloader">
-        Try Dowmly →
+        Try Downly →
       </a>
 
     </article>
@@ -837,12 +892,12 @@ footer p {
       </h3>
 
       <p>
-        Dowmly provides one simple interface for
+        Downly provides one simple interface for
         supported social media links.
       </p>
 
       <a href="#downloader">
-        Try Dowmly →
+        Try Downly →
       </a>
 
     </article>
@@ -856,7 +911,7 @@ footer p {
 <footer>
 
   <div class="footer-logo">
-    All media <span>dowmly</span>
+    Down<span>ly</span>
   </div>
 
   <p>
@@ -864,7 +919,7 @@ footer p {
   </p>
 
   <p>
-    © 2026 Dowmly. All rights reserved.
+    © 2026 Downly. All rights reserved.
   </p>
 
 </footer>
@@ -954,7 +1009,7 @@ if ("serviceWorker" in navigator) {
       .then((registration) => {
 
         console.log(
-          "Dowmly Service Worker registered:",
+          "Downly Service Worker registered:",
           registration.scope
         );
 
@@ -974,11 +1029,14 @@ if ("serviceWorker" in navigator) {
 
 
 /* =====================================================
-   PWA INSTALL - FIXED
+   PWA INSTALL
 ===================================================== */
 
-const installBtn = document.getElementById("install-btn");
-const iosTip = document.getElementById("ios-tip");
+const installBtn =
+  document.getElementById("install-btn");
+
+const iosTip =
+  document.getElementById("ios-tip");
 
 let deferredPrompt = null;
 
@@ -987,165 +1045,98 @@ const isStandalone =
   window.navigator.standalone === true;
 
 const isIOS =
-  /iphone|ipad|ipod/i.test(navigator.userAgent);
+  /iphone|ipad|ipod/i.test(
+    navigator.userAgent
+  );
 
-/* Already installed */
 if (isStandalone) {
+
   installBtn.style.display = "none";
+
 }
 
-/*
-  Chrome/Android sends this event when
-  the website is installable.
-*/
-window.addEventListener("beforeinstallprompt", (event) => {
+window.addEventListener(
+  "beforeinstallprompt",
+  (event) => {
 
-  console.log("Dowmly: Install prompt available");
+    event.preventDefault();
 
-  event.preventDefault();
+    deferredPrompt = event;
 
-  deferredPrompt = event;
+    installBtn.style.display =
+      "inline-block";
 
-  installBtn.style.display = "inline-block";
+    console.log(
+      "Downly PWA install prompt is ready"
+    );
 
-});
-
-/*
-  Install button
-*/
-installBtn.addEventListener("click", async () => {
-
-  /* iPhone / iPad */
-  if (isIOS) {
-
-    iosTip.classList.add("show");
-
-    return;
   }
+);
 
-  /*
-    Native Chrome install prompt
-  */
-  if (deferredPrompt) {
+installBtn.addEventListener(
+  "click",
+  async () => {
 
-    try {
+    if (isIOS) {
 
-      deferredPrompt.prompt();
+      iosTip.classList.toggle("show");
 
-      const result = await deferredPrompt.userChoice;
-
-      console.log(
-        "Dowmly install result:",
-        result.outcome
-      );
-
-      if (result.outcome === "accepted") {
-
-        installBtn.style.display = "none";
-
-      }
-
-      deferredPrompt = null;
-
-    } catch (error) {
-
-      console.error(
-        "Dowmly install error:",
-        error
-      );
+      return;
 
     }
 
-    return;
+    if (deferredPrompt) {
+
+      try {
+
+        await deferredPrompt.prompt();
+
+        const choice =
+          await deferredPrompt.userChoice;
+
+        console.log(
+          "Downly install result:",
+          choice.outcome
+        );
+
+        deferredPrompt = null;
+
+        if (choice.outcome === "accepted") {
+
+          installBtn.style.display =
+            "none";
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "PWA installation error:",
+          error
+        );
+
+      }
+
+      return;
+
+    }
+
+    alert(
+      "Install option is not available yet. " +
+      "Please open Downly directly in Google Chrome " +
+      "and try again."
+    );
+
   }
+);
 
-  /*
-    If Chrome has not supplied the
-    native install event yet.
-  */
-  alert(
-    "Dowmly install is not ready yet. " +
-    "Please open Dowmly directly in Google Chrome, " +
-    "wait a few seconds, then press Install App again."
-  );
+window.addEventListener(
+  "appinstalled",
+  () => {
 
-});
+    installBtn.style.display =
+      "none";
 
-/*
-  Installation completed
-*/
-window.addEventListener("appinstalled", () => {
+    iosTip.classList.remove("show");
 
-  console.log("Dowmly installed successfully");
-
-  installBtn.style.display = "none";
-
-  iosTip.classList.remove("show");
-
-  deferredPrompt = null;
-
-});
-
-
-/* =====================================================
-   DOWNLOADER
-   ACTUAL SERVER API
-===================================================== */
-
-const urlInput =
-  document.getElementById("url-input");
-
-const searchBtn =
-  document.getElementById("search-btn");
-
-const loading =
-  document.getElementById("loading");
-
-const errorMsg =
-  document.getElementById("error-msg");
-
-const resultBox =
-  document.getElementById("result-box");
-
-const resultCard =
-  document.getElementById("result-card");
-
-
-/* RESET */
-
-function resetStates() {
-
-  loading.classList.remove("show");
-
-  errorMsg.classList.remove("show");
-
-  errorMsg.textContent = "";
-
-  resultBox.classList.remove("show");
-
-  resultCard.innerHTML = "";
-
-}
-
-
-/* ERROR */
-
-function showError(message) {
-
-  loading.classList.remove("show");
-
-  resultBox.classList.remove("show");
-
-  errorMsg.textContent = message;
-
-  errorMsg.classList.add("show");
-
-}
-
-
-/* ESCAPE HTML */
-
-function escapeHTML(value) {
-
-  return String(value || "")
-    .replace(/&/g, "
+    deferredPrompt = null;
