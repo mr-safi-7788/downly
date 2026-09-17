@@ -246,8 +246,8 @@
     padding:0 20px;
     text-align:center;
   }
-  #install-btn, #ios-install-btn{
-    display:none;
+  #install-btn{
+    display:inline-block;
     background:var(--bg-elevated);
     border:1px solid var(--border);
     color:var(--text);
@@ -259,7 +259,7 @@
     cursor:pointer;
     transition:border-color .15s, color .15s;
   }
-  #install-btn:hover, #ios-install-btn:hover{border-color:var(--red);color:var(--red-bright)}
+  #install-btn:hover{border-color:var(--red);color:var(--red-bright)}
 
   .ios-tip{
     display:none;
@@ -356,11 +356,8 @@
 </div>
 
 <div class="install-wrap">
-  <!-- Android / Chrome / Edge / desktop browsers that support the real install prompt -->
+  <!-- Visible for everyone by default. JS only hides it if the app is already installed. -->
   <button id="install-btn" data-i18n="install_btn">📲 Install App</button>
-
-  <!-- iOS Safari fallback: no native prompt exists on iOS, so we show manual instructions -->
-  <button id="ios-install-btn" data-i18n="install_btn">📲 Install App</button>
   <div class="ios-tip" id="ios-tip" data-i18n="ios_tip">
     Tap the Share icon, then choose "Add to Home Screen".
   </div>
@@ -512,7 +509,6 @@
   // 3) INSTALL PROMPT — works reliably across devices
   // ===================================================
   const installBtn = document.getElementById("install-btn");
-  const iosInstallBtn = document.getElementById("ios-install-btn");
   const iosTip = document.getElementById("ios-tip");
 
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches
@@ -522,24 +518,23 @@
 
   let deferredPrompt = null;
 
-  if (!isStandalone) {
-    if (isIOS) {
-      // iOS never fires beforeinstallprompt — show manual instructions instead
-      iosInstallBtn.style.display = "inline-block";
-    } else {
-      // Show the button immediately so it's never missing;
-      // if the browser doesn't support native install, we explain that on click.
-      installBtn.style.display = "inline-block";
-    }
+  // Button is visible by default via CSS. We only ever HIDE it here —
+  // never rely on JS to show it, so a script issue elsewhere can't hide the button.
+  if (isStandalone) {
+    installBtn.style.display = "none";
   }
 
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    installBtn.style.display = "inline-block";
   });
 
   installBtn.addEventListener("click", async () => {
+    if (isIOS) {
+      // iOS never fires beforeinstallprompt — show manual instructions instead
+      iosTip.classList.toggle("show");
+      return;
+    }
     if (deferredPrompt) {
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
@@ -552,13 +547,8 @@
     }
   });
 
-  iosInstallBtn.addEventListener("click", () => {
-    iosTip.classList.toggle("show");
-  });
-
   window.addEventListener("appinstalled", () => {
     installBtn.style.display = "none";
-    iosInstallBtn.style.display = "none";
     iosTip.classList.remove("show");
   });
 
@@ -587,4 +577,20 @@
     loading.classList.add("show");
 
     try {
-      cons
+      const res = await fetch("/api/fetch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ url })
+      });
+
+      const data = await res.json();
+      loading.classList.remove("show");
+
+      if (!data.success) {
+        errorMsg.textContent = data.error || "Kuch ghalat ho gaya, dobara try karo.";
+        errorMsg.classList.add("show");
+        return;
+      }
+
+      let html = "";
+      if (data.thumbnai
