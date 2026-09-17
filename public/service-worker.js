@@ -1,28 +1,26 @@
-const CACHE_NAME = 'dowmly-cache-v1';
+const CACHE_NAME = "dowmly-cache-v2";
 
 const PRECACHE_URLS = [
-  '/',
-  '/manifest.json',
-  '/icons/icon-96x96.png',
-  '/icons/icon-180x180.png',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png'
+  "/",
+  "/manifest.json",
+  "/icons/icon-96x96.png",
+  "/icons/icon-180x180.png",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png"
 ];
 
-// Install: cache the basic files
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(PRECACHE_URLS).catch((err) => {
-        console.log('Precache skipped some files:', err);
+        console.log("Precache skipped some files:", err);
       });
     })
   );
 });
 
-// Activate: clean up old caches
-self.addEventListener('activate', (event) => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
@@ -35,9 +33,8 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch: network first, fallback to cache
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== "GET") return;
 
   event.respondWith(
     fetch(event.request)
