@@ -974,14 +974,11 @@ if ("serviceWorker" in navigator) {
 
 
 /* =====================================================
-   PWA INSTALL
+   PWA INSTALL - FIXED
 ===================================================== */
 
-const installBtn =
-  document.getElementById("install-btn");
-
-const iosTip =
-  document.getElementById("ios-tip");
+const installBtn = document.getElementById("install-btn");
+const iosTip = document.getElementById("ios-tip");
 
 let deferredPrompt = null;
 
@@ -990,108 +987,104 @@ const isStandalone =
   window.navigator.standalone === true;
 
 const isIOS =
-  /iphone|ipad|ipod/i.test(
-    navigator.userAgent
-  );
+  /iphone|ipad|ipod/i.test(navigator.userAgent);
 
+/* Already installed */
 if (isStandalone) {
-
   installBtn.style.display = "none";
-
 }
 
-window.addEventListener(
-  "beforeinstallprompt",
-  (event) => {
+/*
+  Chrome/Android sends this event when
+  the website is installable.
+*/
+window.addEventListener("beforeinstallprompt", (event) => {
 
-    event.preventDefault();
+  console.log("Dowmly: Install prompt available");
 
-    deferredPrompt = event;
+  event.preventDefault();
 
-    installBtn.style.display =
-      "inline-block";
+  deferredPrompt = event;
 
-    console.log(
-      "Dowmly PWA install prompt is ready"
-    );
+  installBtn.style.display = "inline-block";
 
+});
+
+/*
+  Install button
+*/
+installBtn.addEventListener("click", async () => {
+
+  /* iPhone / iPad */
+  if (isIOS) {
+
+    iosTip.classList.add("show");
+
+    return;
   }
-);
 
-installBtn.addEventListener(
-  "click",
-  async () => {
+  /*
+    Native Chrome install prompt
+  */
+  if (deferredPrompt) {
 
-    if (isIOS) {
+    try {
 
-      iosTip.classList.toggle("show");
+      deferredPrompt.prompt();
 
-      return;
+      const result = await deferredPrompt.userChoice;
 
-    }
+      console.log(
+        "Dowmly install result:",
+        result.outcome
+      );
 
-    if (deferredPrompt) {
+      if (result.outcome === "accepted") {
 
-      try {
-
-        await deferredPrompt.prompt();
-
-        const choice =
-          await deferredPrompt.userChoice;
-
-        console.log(
-          "Dowmly install result:",
-          choice.outcome
-        );
-
-        deferredPrompt = null;
-
-        if (choice.outcome === "accepted") {
-
-          installBtn.style.display =
-            "none";
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "PWA installation error:",
-          error
-        );
+        installBtn.style.display = "none";
 
       }
 
-      return;
+      deferredPrompt = null;
+
+    } catch (error) {
+
+      console.error(
+        "Dowmly install error:",
+        error
+      );
 
     }
 
-    alert(
-      "Install option is not available yet. " +
-      "Please open Dowmly directly in Google Chrome " +
-      "and try again."
-    );
-
+    return;
   }
-);
 
-window.addEventListener(
-  "appinstalled",
-  () => {
+  /*
+    If Chrome has not supplied the
+    native install event yet.
+  */
+  alert(
+    "Dowmly install is not ready yet. " +
+    "Please open Dowmly directly in Google Chrome, " +
+    "wait a few seconds, then press Install App again."
+  );
 
-    installBtn.style.display =
-      "none";
+});
 
-    iosTip.classList.remove("show");
+/*
+  Installation completed
+*/
+window.addEventListener("appinstalled", () => {
 
-    deferredPrompt = null;
+  console.log("Dowmly installed successfully");
 
-    console.log(
-      "Dowmly PWA installed successfully"
-    );
+  installBtn.style.display = "none";
 
-  }
-);
+  iosTip.classList.remove("show");
+
+  deferredPrompt = null;
+
+});
 
 
 /* =====================================================
