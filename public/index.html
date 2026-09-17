@@ -3,721 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- GOOGLE ANALYTICS -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NNCMWM4CG7"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-NNCMWM4CG7');
-</script>
-
-<!-- SEO -->
-<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Video Downloader</title>
-
-<meta name="description"
-content="Free online tool to download videos from TikTok, Instagram, Pinterest, YouTube and Facebook. Fast, simple and easy to use.">
-
-<meta name="keywords"
-content="tiktok downloader, instagram downloader, pinterest downloader, youtube downloader, facebook downloader, video downloader">
-
-<link rel="canonical" href="https://downly-88cv.onrender.com/">
-
-<!-- OPEN GRAPH -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Downly | Video Downloader">
-<meta property="og:description"
-content="Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook.">
-<meta property="og:image"
-content="https://downly-88cv.onrender.com/icons/icon-512x512.png">
-<meta property="og:url"
-content="https://downly-88cv.onrender.com/">
-
-<!-- TWITTER -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Downly | Video Downloader">
-<meta name="twitter:description"
-content="Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook.">
-<meta name="twitter:image"
-content="https://downly-88cv.onrender.com/icons/icon-512x512.png">
-
-<!-- PWA -->
-<link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#e50000">
-
-<!-- ICONS -->
-<link rel="icon" type="image/png" sizes="32x32"
-href="/icons/favicon-32x32.png">
-
-<link rel="icon" type="image/png" sizes="16x16"
-href="/icons/favicon-16x16.png">
-
-<link rel="apple-touch-icon" sizes="180x180"
-href="/icons/icon-180x180.png">
-
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Downly">
-
-<!-- FONTS -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap"
-rel="stylesheet">
-
-<!-- JSON LD -->
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"WebApplication",
-  "name":"Downly",
-  "url":"https://downly-88cv.onrender.com/",
-  "applicationCategory":"MultimediaApplication",
-  "operatingSystem":"Any",
-  "offers":{
-    "@type":"Offer",
-    "price":"0",
-    "priceCurrency":"USD"
-  }
-}
-</script>
+<title>Downly | TikTok, Instagram, Pinterest, YouTube & Facebook Downloader</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: "Inter", Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background: #050505;
-  color: #ffffff;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button,
-input {
-  font-family: inherit;
-}
-
-/* ================= HEADER ================= */
-
-header {
-  width: 100%;
-  border-bottom: 1px solid #202020;
-  background: rgba(5,5,5,0.96);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-}
-
-.header-inner {
-  max-width: 1200px;
-  margin: auto;
-  min-height: 70px;
-  padding: 0 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.logo {
-  font-family: "Poppins", sans-serif;
-  font-size: 25px;
-  font-weight: 800;
-  letter-spacing: -1px;
-  white-space: nowrap;
-}
-
-.logo span {
-  color: #e50000;
-}
-
-.language-select {
-  background: #111;
-  border: 1px solid #333;
   color: white;
-  border-radius: 9px;
-  padding: 9px 12px;
-  outline: none;
-  cursor: pointer;
 }
 
-/* ================= NAV ================= */
-
-nav {
-  border-bottom: 1px solid #181818;
-  background: #080808;
-}
-
-.nav-inner {
-  max-width: 1200px;
+.container {
+  width: min(700px, 94%);
   margin: auto;
-  padding: 12px 20px;
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  padding: 40px 0;
 }
 
-.nav-inner::-webkit-scrollbar {
-  display: none;
-}
-
-.nav-link {
-  padding: 9px 14px;
-  border-radius: 8px;
-  color: #bdbdbd;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: 0.2s;
-}
-
-.nav-link:hover {
-  color: white;
-  background: #151515;
-}
-
-/* ================= HERO ================= */
-
-.hero {
-  max-width: 1000px;
-  margin: auto;
-  padding: 85px 20px 55px;
+h1 {
+  font-size: clamp(32px, 7vw, 50px);
   text-align: center;
+  margin: 0 0 30px;
 }
 
-.hero h1 {
-  margin: 0;
-  font-family: "Poppins", sans-serif;
-  font-size: clamp(38px, 7vw, 68px);
-  line-height: 1.08;
-  letter-spacing: -2px;
-}
-
-.hero h1 span {
-  color: #e50000;
-}
-
-.hero p {
-  max-width: 700px;
-  margin: 20px auto 35px;
-  color: #a9a9a9;
-  font-size: 17px;
-  line-height: 1.7;
-}
-
-/* ================= TABS ================= */
+.pink { color: #ff2855; }
 
 .tabs {
-  max-width: 760px;
-  margin: 0 auto 14px;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .tab {
-  padding: 12px 6px;
-  border-radius: 12px;
+  padding: 14px 8px;
+  border-radius: 14px;
   background: #111;
   border: 1px solid #292929;
   text-align: center;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: bold;
   color: #999;
-  font-size: 13px;
-  transition: 0.2s;
+  font-size: 14px;
 }
 
 .tab.active {
-  background: #e50000;
+  background: #ff2855;
   color: white;
-  border-color: #e50000;
+  border-color: #ff2855;
 }
 
-/* ================= SEARCH ================= */
-
-.search-box {
-  max-width: 760px;
-  margin: auto;
-  display: flex;
-  gap: 10px;
-  padding: 8px;
-  background: #101010;
-  border: 1px solid #2a2a2a;
-  border-radius: 15px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.35);
-}
-
-.search-box input {
-  flex: 1;
-  min-width: 0;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: white;
-  padding: 15px;
-  font-size: 16px;
-}
-
-.search-box input::placeholder {
-  color: #777;
-}
-
-.search-box button {
-  border: 0;
-  background: #e50000;
-  color: white;
-  padding: 0 25px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.search-box button:hover {
-  background: #ff1717;
-}
-
-.search-box button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* ================= SUPPORTED ================= */
-
-.supported {
-  margin-top: 22px;
-  color: #777;
-  font-size: 13px;
-  text-align: center;
-}
-
-/* ================= LOADING ================= */
-
-.loading {
-  display: none;
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 15px 20px;
-  text-align: center;
-  color: #aaa;
-}
-
-.loading.show {
-  display: block;
-}
-
-.loader {
-  width: 30px;
-  height: 30px;
-  margin: 0 auto 10px;
-  border: 3px solid #333;
-  border-top-color: #e50000;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ================= ERROR ================= */
-
-.error-msg {
-  display: none;
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 15px 18px;
-  border: 1px solid #5d1a1a;
-  background: #210b0b;
-  color: #ff8585;
-  border-radius: 10px;
-  text-align: center;
-}
-
-.error-msg.show {
-  display: block;
-}
-
-/* ================= RESULT ================= */
-
-.result-box {
-  display: none;
-  max-width: 760px;
-  margin: 25px auto 50px;
-  padding: 0 20px;
-}
-
-.result-box.show {
-  display: block;
-}
-
-.result-card {
-  background: #101010;
+.box {
+  padding: 18px;
   border: 1px solid #292929;
-  border-radius: 18px;
-  padding: 20px;
-  overflow: hidden;
+  border-radius: 25px;
+  background: #0c0c0c;
 }
 
-.result-thumb {
+input {
   width: 100%;
-  max-height: 420px;
+  padding: 18px;
+  border-radius: 15px;
+  border: 1px solid #333;
+  background: #151515;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+input:focus { border-color: #ff2855; }
+
+.search {
+  width: 100%;
+  margin-top: 12px;
+  padding: 18px;
+  border: 0;
+  border-radius: 15px;
+  background: #ff2855;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.search:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.result { display: none; margin-top: 25px; }
+
+.message {
+  padding: 16px;
+  border-radius: 15px;
+  background: #281017;
+  color: #ff9aae;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.message.success { background: #0f2818; color: #9affb8; }
+
+.preview {
+  padding: 18px;
+  background: #0d0d0d;
+  border: 1px solid #292929;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.preview img, .preview video {
+  width: 100%;
+  border-radius: 14px;
+  max-height: 480px;
   object-fit: contain;
   background: #000;
-  border-radius: 12px;
-  display: block;
-  margin-bottom: 18px;
 }
 
-.result-card h3 {
-  margin: 0 0 18px;
-  font-size: 19px;
-  line-height: 1.5;
+.preview h3 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #ddd;
 }
 
-.download-list {
+.buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 15px;
 }
 
-.download-link {
-  display: block;
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 10px;
-  background: #e50000;
-  color: white;
-  text-align: center;
-  font-weight: 700;
-  transition: 0.2s;
+.dl {
+  padding: 16px;
   border: 0;
+  border-radius: 14px;
+  background: white;
+  color: black;
+  font-weight: bold;
   cursor: pointer;
+  text-decoration: none;
+  display: block;
 }
 
-.download-link.secondary {
+.dl.secondary {
   background: #181818;
   border: 1px solid #333;
   color: white;
 }
-
-.download-link:hover {
-  background: #ff1717;
-  transform: translateY(-1px);
-}
-
-.download-link.secondary:hover {
-  background: #232323;
-}
-
-.no-media {
-  color: #888;
-  text-align: center;
-  padding: 10px;
-}
-
-/* ================= INSTALL ================= */
-
-.install-wrap {
-  text-align: center;
-  margin: 25px auto 70px;
-  padding: 0 20px;
-}
-
-#install-btn {
-  display: inline-block;
-  border: 1px solid #3a3a3a;
-  background: #111;
-  color: white;
-  padding: 13px 20px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 700;
-  transition: 0.2s;
-}
-
-#install-btn:hover {
-  background: #1c1c1c;
-  border-color: #e50000;
-}
-
-.ios-tip {
-  display: none;
-  max-width: 500px;
-  margin: 12px auto 0;
-  padding: 12px 15px;
-  border-radius: 9px;
-  background: #111;
-  border: 1px solid #292929;
-  color: #aaa;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.ios-tip.show {
-  display: block;
-}
-
-/* ================= FEATURES ================= */
-
-.features {
-  max-width: 1100px;
-  margin: 0 auto 80px;
-  padding: 0 20px;
-}
-
-.features-title {
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  font-size: 30px;
-  margin-bottom: 30px;
-}
-
-.feature-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.feature-card {
-  padding: 25px;
-  border: 1px solid #242424;
-  border-radius: 15px;
-  background: #0d0d0d;
-}
-
-.feature-icon {
-  font-size: 30px;
-  margin-bottom: 12px;
-}
-
-.feature-card h3 {
-  margin: 0 0 8px;
-}
-
-.feature-card p {
-  margin: 0;
-  color: #888;
-  line-height: 1.6;
-  font-size: 14px;
-}
-
-/* ================= BLOG ================= */
-
-.blog-section {
-  max-width: 1100px;
-  margin: 0 auto 80px;
-  padding: 0 20px;
-}
-
-.blog-title {
-  text-align: center;
-  font-family: "Poppins", sans-serif;
-  font-size: 30px;
-  margin-bottom: 30px;
-}
-
-.blog-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.blog-card {
-  background: #0d0d0d;
-  border: 1px solid #242424;
-  border-radius: 15px;
-  padding: 22px;
-  transition: 0.2s;
-}
-
-.blog-card:hover {
-  border-color: #444;
-  transform: translateY(-3px);
-}
-
-.blog-card h3 {
-  margin-top: 0;
-  line-height: 1.4;
-}
-
-.blog-card p {
-  color: #888;
-  line-height: 1.6;
-  font-size: 14px;
-}
-
-.blog-card a {
-  color: #e50000;
-  font-weight: 700;
-}
-
-/* ================= FOOTER ================= */
-
-footer {
-  border-top: 1px solid #202020;
-  background: #080808;
-  padding: 35px 20px;
-  text-align: center;
-  color: #777;
-  font-size: 13px;
-}
-
-.footer-logo {
-  font-family: "Poppins", sans-serif;
-  color: white;
-  font-size: 22px;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.footer-logo span {
-  color: #e50000;
-}
-
-footer p {
-  margin: 7px 0;
-}
-
-/* ================= MOBILE ================= */
-
-@media (max-width: 700px) {
-
-  .header-inner {
-    min-height: 62px;
-    padding: 0 14px;
-  }
-
-  .logo {
-    font-size: 21px;
-  }
-
-  .language-select {
-    padding: 8px;
-    font-size: 12px;
-  }
-
-  .hero {
-    padding: 55px 15px 35px;
-  }
-
-  .hero h1 {
-    font-size: 39px;
-    letter-spacing: -1.5px;
-  }
-
-  .hero p {
-    font-size: 15px;
-  }
-
-  .tabs {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  .search-box {
-    flex-direction: column;
-    padding: 8px;
-  }
-
-  .search-box input {
-    width: 100%;
-    padding: 14px;
-  }
-
-  .search-box button {
-    width: 100%;
-    min-height: 48px;
-  }
-
-  .result-box {
-    padding: 0 15px;
-  }
-
-  .feature-grid,
-  .blog-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .features-title,
-  .blog-title {
-    font-size: 26px;
-  }
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- ================= HEADER ================= -->
+<div class="container">
 
-<header>
-  <div class="header-inner">
+  <h1>Down<span class="pink">ly</span></h1>
 
-    <a href="/" class="logo">
-      Down<span>ly</span>
-    </a>
-
-    <select id="language-select" class="language-select">
-      <option value="en">English</option>
-      <option value="ur">اردو</option>
-      <option value="hi">हिन्दी</option>
-      <option value="ar">العربية</option>
-    </select>
-
-  </div>
-</header>
-
-<!-- ================= NAV ================= -->
-
-<nav>
-  <div class="nav-inner">
-
-    <a class="nav-link" href="#downloader">TikTok</a>
-    <a class="nav-link" href="#downloader">Instagram</a>
-    <a class="nav-link" href="#downloader">Pinterest</a>
-    <a class="nav-link" href="#downloader">YouTube</a>
-    <a class="nav-link" href="#downloader">Facebook</a>
-    <a class="nav-link" href="#blog">Blog</a>
-
-  </div>
-</nav>
-
-<!-- ================= HERO ================= -->
-
-<main id="downloader">
-
-<section class="hero">
-
-  <h1>
-    Download Any Video
-    <span>Instantly</span>
-  </h1>
-
-  <p>
-    Download videos from TikTok, Instagram, Pinterest,
-    YouTube and Facebook using Downly.
-  </p>
-
-  <div class="tabs" id="tabs">
+  <div class="tabs">
     <div class="tab active" data-platform="tiktok">TikTok</div>
     <div class="tab" data-platform="instagram">Instagram</div>
     <div class="tab" data-platform="pinterest">Pinterest</div>
@@ -725,418 +165,174 @@ footer p {
     <div class="tab" data-platform="facebook">Facebook</div>
   </div>
 
-  <div class="search-box">
-
-    <input
-      type="url"
-      id="url-input"
-      placeholder="Paste video link here..."
-      autocomplete="off"
-      spellcheck="false"
-    >
-
-    <button id="search-btn">
-      Download
-    </button>
-
+  <div class="box">
+    <input id="url" type="text" placeholder="Paste TikTok video link here">
+    <button id="searchBtn" class="search" onclick="search()">Search</button>
   </div>
 
-  <div class="supported">
-    TikTok • Instagram • Pinterest • YouTube • Facebook
-  </div>
-
-</section>
-
-<!-- ================= LOADING ================= -->
-
-<div class="loading" id="loading">
-
-  <div class="loader"></div>
-
-  <div>
-    Fetching your media...
+  <div id="result" class="result">
+    <div id="message" class="message"></div>
+    <div id="preview" class="preview" style="display:none;"></div>
   </div>
 
 </div>
-
-<!-- ================= ERROR ================= -->
-
-<div class="error-msg" id="error-msg"></div>
-
-<!-- ================= RESULT ================= -->
-
-<div class="result-box" id="result-box">
-
-  <div class="result-card" id="result-card"></div>
-
-</div>
-
-<!-- ================= INSTALL APP ================= -->
-
-<div class="install-wrap">
-
-  <button id="install-btn">
-    📲 Install App
-  </button>
-
-  <div class="ios-tip" id="ios-tip">
-    Tap the Share icon, then choose
-    "Add to Home Screen".
-  </div>
-
-</div>
-
-</main>
-
-<!-- ================= FEATURES ================= -->
-
-<section class="features">
-
-  <h2 class="features-title">
-    Why Use Downly?
-  </h2>
-
-  <div class="feature-grid">
-
-    <div class="feature-card">
-
-      <div class="feature-icon">⚡</div>
-
-      <h3>Fast</h3>
-
-      <p>
-        Get your media information quickly and
-        download available files with simple clicks.
-      </p>
-
-    </div>
-
-    <div class="feature-card">
-
-      <div class="feature-icon">📱</div>
-
-      <h3>Mobile Friendly</h3>
-
-      <p>
-        Downly works smoothly on phones, tablets
-        and desktop browsers.
-      </p>
-
-    </div>
-
-    <div class="feature-card">
-
-      <div class="feature-icon">🔗</div>
-
-      <h3>Multiple Platforms</h3>
-
-      <p>
-        Use one simple downloader for supported
-        social media platforms.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ================= BLOG ================= -->
-
-<section class="blog-section" id="blog">
-
-  <h2 class="blog-title">
-    Downly Blog
-  </h2>
-
-  <div class="blog-grid">
-
-    <article class="blog-card">
-
-      <h3>
-        How to Download TikTok Videos
-      </h3>
-
-      <p>
-        Learn how to use Downly to fetch supported
-        TikTok media from a shared link.
-      </p>
-
-      <a href="#downloader">
-        Try Downly →
-      </a>
-
-    </article>
-
-    <article class="blog-card">
-
-      <h3>
-        Instagram Video Downloader
-      </h3>
-
-      <p>
-        Paste an Instagram link into Downly and
-        check the available media options.
-      </p>
-
-      <a href="#downloader">
-        Try Downly →
-      </a>
-
-    </article>
-
-    <article class="blog-card">
-
-      <h3>
-        Download Videos Online
-      </h3>
-
-      <p>
-        Downly provides one simple interface for
-        supported social media links.
-      </p>
-
-      <a href="#downloader">
-        Try Downly →
-      </a>
-
-    </article>
-
-  </div>
-
-</section>
-
-<!-- ================= FOOTER ================= -->
-
-<footer>
-
-  <div class="footer-logo">
-    Down<span>ly</span>
-  </div>
-
-  <p>
-    Free online media downloader.
-  </p>
-
-  <p>
-    © 2026 Downly. All rights reserved.
-  </p>
-
-</footer>
 
 <script>
 
-/* =====================================================
-   LANGUAGE SYSTEM
-===================================================== */
+let currentPlatform = "tiktok"
 
-const translations = {
-
-  en: {
-    download: "Download",
-    placeholder: "Paste video link here...",
-    fetching: "Fetching your media...",
-    install: "📲 Install App"
-  },
-
-  ur: {
-    download: "ڈاؤن لوڈ",
-    placeholder: "ویڈیو لنک یہاں پیسٹ کریں...",
-    fetching: "آپ کی میڈیا فائل حاصل کی جا رہی ہے...",
-    install: "📲 ایپ انسٹال کریں"
-  },
-
-  hi: {
-    download: "डाउनलोड",
-    placeholder: "वीडियो लिंक यहाँ पेस्ट करें...",
-    fetching: "आपकी मीडिया प्राप्त की जा रही है...",
-    install: "📲 ऐप इंस्टॉल करें"
-  },
-
-  ar: {
-    download: "تحميل",
-    placeholder: "الصق رابط الفيديو هنا...",
-    fetching: "جاري جلب الوسائط...",
-    install: "📲 تثبيت التطبيق"
-  }
-
-};
-
-function applyLanguage(language) {
-
-  const t = translations[language] || translations.en;
-
-  document.getElementById("search-btn").textContent = t.download;
-
-  document.getElementById("url-input").placeholder =
-    t.placeholder;
-
-  document.querySelector("#loading div:last-child").textContent =
-    t.fetching;
-
-  document.getElementById("install-btn").textContent =
-    t.install;
-
-  document.documentElement.lang = language;
-
-  if (language === "ur" || language === "ar") {
-    document.body.dir = "rtl";
-  } else {
-    document.body.dir = "ltr";
-  }
-
+const placeholders = {
+  tiktok: "Paste TikTok video link here",
+  instagram: "Paste Instagram post or reel link here",
+  pinterest: "Paste Pinterest pin link here",
+  youtube: "Paste YouTube video link here",
+  facebook: "Paste Facebook video link here"
 }
 
-document
-  .getElementById("language-select")
-  .addEventListener("change", function () {
-    applyLanguage(this.value);
-  });
-
-applyLanguage("en");
-
-
-/* =====================================================
-   SERVICE WORKER
-===================================================== */
-
-if ("serviceWorker" in navigator) {
-
-  window.addEventListener("load", () => {
-
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then((registration) => {
-
-        console.log(
-          "Downly Service Worker registered:",
-          registration.scope
-        );
-
-      })
-      .catch((error) => {
-
-        console.error(
-          "Service Worker registration failed:",
-          error
-        );
-
-      });
-
-  });
-
+const qualityLabels = {
+  hd_no_watermark: "Download HD (No Watermark)",
+  no_watermark: "Download (No Watermark)",
+  watermark: "Download (With Watermark)",
+  audio: "Download Audio Only (MP3)"
 }
 
+document.querySelectorAll(".tab").forEach(tab => {
+  tab.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"))
+    tab.classList.add("active")
+    currentPlatform = tab.dataset.platform
+    document.getElementById("url").placeholder = placeholders[currentPlatform]
+    document.getElementById("result").style.display = "none"
+    document.getElementById("url").value = ""
+  })
+})
 
-/* =====================================================
-   PWA INSTALL
-===================================================== */
+async function search() {
 
-const installBtn =
-  document.getElementById("install-btn");
+  const input = document.getElementById("url")
+  const url = input.value.trim()
+  const btn = document.getElementById("searchBtn")
 
-const iosTip =
-  document.getElementById("ios-tip");
-
-let deferredPrompt = null;
-
-const isStandalone =
-  window.matchMedia("(display-mode: standalone)").matches ||
-  window.navigator.standalone === true;
-
-const isIOS =
-  /iphone|ipad|ipod/i.test(
-    navigator.userAgent
-  );
-
-if (isStandalone) {
-
-  installBtn.style.display = "none";
-
-}
-
-window.addEventListener(
-  "beforeinstallprompt",
-  (event) => {
-
-    event.preventDefault();
-
-    deferredPrompt = event;
-
-    installBtn.style.display =
-      "inline-block";
-
-    console.log(
-      "Downly PWA install prompt is ready"
-    );
-
+  if (!url) {
+    alert("Please paste a link first.")
+    return
   }
-);
 
-installBtn.addEventListener(
-  "click",
-  async () => {
+  const result = document.getElementById("result")
+  const message = document.getElementById("message")
+  const preview = document.getElementById("preview")
 
-    if (isIOS) {
+  result.style.display = "block"
+  preview.style.display = "none"
+  message.classList.remove("success")
+  message.textContent = "Searching..."
 
-      iosTip.classList.toggle("show");
+  btn.disabled = true
+  btn.textContent = "Searching..."
 
-      return;
+  try {
 
+    const response = await fetch("/api/fetch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url })
+    })
+
+    const data = await response.json()
+
+    if (!data.success) {
+      message.textContent = data.error || "Could not find this content."
+      return
     }
 
-    if (deferredPrompt) {
+    message.classList.add("success")
+    message.textContent = "Found! See preview below."
 
-      try {
+    renderPreview(data)
 
-        await deferredPrompt.prompt();
-
-        const choice =
-          await deferredPrompt.userChoice;
-
-        console.log(
-          "Downly install result:",
-          choice.outcome
-        );
-
-        deferredPrompt = null;
-
-        if (choice.outcome === "accepted") {
-
-          installBtn.style.display =
-            "none";
-
-        }
-
-      } catch (error) {
-
-        console.error(
-          "PWA installation error:",
-          error
-        );
-
-      }
-
-      return;
-
-    }
-
-    alert(
-      "Install option is not available yet. " +
-      "Please open Downly directly in Google Chrome " +
-      "and try again."
-    );
-
+  } catch (error) {
+    message.textContent = "Server connection failed. Please try again."
+  } finally {
+    btn.disabled = false
+    btn.textContent = "Search"
   }
-);
+}
 
-window.addEventListener(
-  "appinstalled",
-  () => {
+function proxyDownloadUrl(mediaUrl, quality, extension) {
+  const filename = `downly-${quality}.${extension}`
+  return `/api/download-proxy?url=${encodeURIComponent(mediaUrl)}&filename=${encodeURIComponent(filename)}`
+}
 
-    installBtn.style.display =
-      "none";
+function renderPreview(data) {
 
-    iosTip.classList.remove("show");
+  const preview = document.getElementById("preview")
+  preview.style.display = "block"
+  preview.innerHTML = ""
 
-    deferredPrompt = null;
+  const titleEl = document.createElement("h3")
+  titleEl.textContent = data.title || "Preview"
+  preview.appendChild(titleEl)
+
+  const videos = data.medias.filter(m => m.type === "video")
+  const images = data.medias.filter(m => m.type === "image")
+  const audios = data.medias.filter(m => m.type === "audio")
+
+  const bestVideo =
+    videos.find(v => v.quality === "hd_no_watermark") ||
+    videos.find(v => v.quality === "no_watermark") ||
+    videos[0]
+
+  if (bestVideo) {
+    const video = document.createElement("video")
+    video.src = bestVideo.url
+    video.controls = true
+    if (data.thumbnail) video.poster = data.thumbnail
+    preview.appendChild(video)
+  } else if (images.length > 0) {
+    const img = document.createElement("img")
+    img.src = images[0].url
+    preview.appendChild(img)
+  } else if (data.thumbnail) {
+    const img = document.createElement("img")
+    img.src = data.thumbnail
+    preview.appendChild(img)
+  }
+
+  const buttons = document.createElement("div")
+  buttons.className = "buttons"
+
+  videos.forEach((v, i) => {
+    const a = document.createElement("a")
+    a.href = proxyDownloadUrl(v.url, v.quality, v.extension)
+    a.className = i === 0 ? "dl" : "dl secondary"
+    a.textContent = qualityLabels[v.quality] || `Download Video (${v.quality})`
+    buttons.appendChild(a)
+  })
+
+  images.forEach((img, i) => {
+    const a = document.createElement("a")
+    a.href = proxyDownloadUrl(img.url, `image-${i + 1}`, img.extension)
+    a.className = "dl secondary"
+    a.textContent = images.length > 1 ? `Download Image ${i + 1}` : "Download Image"
+    buttons.appendChild(a)
+  })
+
+  audios.forEach(aud => {
+    const a = document.createElement("a")
+    a.href = proxyDownloadUrl(aud.url, "audio", aud.extension)
+    a.className = "dl secondary"
+    a.textContent = qualityLabels.audio
+    buttons.appendChild(a)
+  })
+
+  preview.appendChild(buttons)
+}
+
+document.getElementById("url").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") search()
+})
+
+</script>
+
+</body>
+</html>
