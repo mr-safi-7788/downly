@@ -201,6 +201,7 @@
     transition:background .15s;
   }
   .search-box button:hover{background:var(--red-bright)}
+  .search-box button:disabled{opacity:.6;cursor:not-allowed}
 
   /* ===== STATES ===== */
   .loading, .error-msg{
@@ -530,8 +531,6 @@
   }
   updateDebug("page loaded");
 
-  // Button is visible by default via CSS. We only ever HIDE it here —
-  // never rely on JS to show it, so a script issue elsewhere can't hide the button.
   if (isStandalone) {
     installBtn.style.display = "none";
   }
@@ -544,7 +543,6 @@
 
   installBtn.addEventListener("click", async () => {
     if (isIOS) {
-      // iOS never fires beforeinstallprompt — show manual instructions instead
       iosTip.classList.toggle("show");
       updateDebug("clicked — showed iOS instructions");
       return;
@@ -574,4 +572,9 @@
   const urlInput = document.getElementById("url-input");
   const searchBtn = document.getElementById("search-btn");
   const loading = document.getElementById("loading");
-  const errorMsg = document.getElem
+  const errorMsg = document.getElementById("error-msg");
+  const resultBox = document.getElementById("result-box");
+  const resultCard = document.getElementById("result-card");
+
+  function resetStates(){
+    lo
