@@ -361,6 +361,7 @@
   <div class="ios-tip" id="ios-tip" data-i18n="ios_tip">
     Tap the Share icon, then choose "Add to Home Screen".
   </div>
+  <div id="debug-info" style="margin-top:14px;font-size:12px;color:#666;text-align:left;max-width:320px;margin-left:auto;margin-right:auto;background:#111;border-radius:8px;padding:10px;font-family:monospace;white-space:pre-wrap;"></div>
 </div>
 
 <section class="blog-section">
@@ -510,6 +511,7 @@
   // ===================================================
   const installBtn = document.getElementById("install-btn");
   const iosTip = document.getElementById("ios-tip");
+  const debugInfo = document.getElementById("debug-info");
 
   const isStandalone = window.matchMedia("(display-mode: standalone)").matches
                         || window.navigator.standalone === true;
@@ -517,6 +519,16 @@
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
 
   let deferredPrompt = null;
+
+  function updateDebug(extra){
+    debugInfo.textContent =
+      "isIOS: " + isIOS + "\n" +
+      "isStandalone: " + isStandalone + "\n" +
+      "deferredPrompt available: " + (deferredPrompt !== null) + "\n" +
+      "userAgent: " + navigator.userAgent + "\n" +
+      (extra ? ("last action: " + extra) : "");
+  }
+  updateDebug("page loaded");
 
   // Button is visible by default via CSS. We only ever HIDE it here —
   // never rely on JS to show it, so a script issue elsewhere can't hide the button.
@@ -527,29 +539,33 @@
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
+    updateDebug("beforeinstallprompt fired — Chrome offered install");
   });
 
   installBtn.addEventListener("click", async () => {
     if (isIOS) {
       // iOS never fires beforeinstallprompt — show manual instructions instead
       iosTip.classList.toggle("show");
+      updateDebug("clicked — showed iOS instructions");
       return;
     }
     if (deferredPrompt) {
+      updateDebug("clicked — calling native prompt()");
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      console.log("Install outcome:", outcome);
+      updateDebug("user choice result: " + outcome);
       deferredPrompt = null;
       installBtn.style.display = "none";
     } else {
-      // Browser doesn't support native install prompt (e.g. Firefox desktop)
-      alert("Is browser mein direct install support nahi hai. Chrome, Edge ya Samsung Internet try karen — ya browser menu se 'Add to Home Screen' dhoondhen.");
+      updateDebug("clicked — NO deferredPrompt available, browser never offered install");
+      alert("Is browser mein direct install support nahi hai, ya Chrome ne abhi install offer nahi kiya. Chrome, Edge ya Samsung Internet try karen — ya browser menu (⋮) se 'Add to Home Screen' / 'Install app' dhoondhen.");
     }
   });
 
   window.addEventListener("appinstalled", () => {
     installBtn.style.display = "none";
     iosTip.classList.remove("show");
+    updateDebug("appinstalled event fired");
   });
 
   // ===================================================
@@ -558,39 +574,4 @@
   const urlInput = document.getElementById("url-input");
   const searchBtn = document.getElementById("search-btn");
   const loading = document.getElementById("loading");
-  const errorMsg = document.getElementById("error-msg");
-  const resultBox = document.getElementById("result-box");
-  const resultCard = document.getElementById("result-card");
-
-  async function fetchMedia() {
-    const url = urlInput.value.trim();
-
-    errorMsg.classList.remove("show");
-    resultBox.classList.remove("show");
-
-    if (!url) {
-      errorMsg.textContent = "Pehle koi link paste karo.";
-      errorMsg.classList.add("show");
-      return;
-    }
-
-    loading.classList.add("show");
-
-    try {
-      const res = await fetch("/api/fetch", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-      });
-
-      const data = await res.json();
-      loading.classList.remove("show");
-
-      if (!data.success) {
-        errorMsg.textContent = data.error || "Kuch ghalat ho gaya, dobara try karo.";
-        errorMsg.classList.add("show");
-        return;
-      }
-
-      let html = "";
-      if (data.thumbnai
+  const errorMsg = document.getElem
