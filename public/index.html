@@ -15,19 +15,62 @@ body {
   color: white;
 }
 
+a { color: inherit; }
+
 .container {
   width: min(700px, 94%);
   margin: auto;
   padding: 40px 0;
 }
 
+/* ---------- top nav ---------- */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0 10px;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.lang {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid #292929;
+  background: #111;
+  color: #ddd;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+hr.divider {
+  border: none;
+  border-top: 1px solid #1c1c1c;
+  margin: 10px 0 0;
+}
+
 h1 {
   font-size: clamp(32px, 7vw, 50px);
   text-align: center;
-  margin: 0 0 30px;
+  margin: 40px 0 16px;
+  line-height: 1.15;
 }
 
 .pink { color: #ff2855; }
+
+.hero-sub {
+  text-align: center;
+  color: #999;
+  font-size: 16px;
+  line-height: 1.6;
+  max-width: 520px;
+  margin: 0 auto 30px;
+}
 
 .tabs {
   display: grid;
@@ -89,6 +132,32 @@ input:focus { border-color: #ff2855; }
 
 .search:disabled { opacity: 0.6; cursor: not-allowed; }
 
+.platform-list {
+  text-align: center;
+  color: #777;
+  font-size: 14px;
+  margin: 20px 0 0;
+}
+
+.install-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 34px 0;
+}
+
+.install-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 26px;
+  border-radius: 16px;
+  border: 1px solid #292929;
+  background: #0c0c0c;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 .result { display: none; margin-top: 25px; }
 
 .message {
@@ -141,12 +210,84 @@ input:focus { border-color: #ff2855; }
   cursor: pointer;
   text-decoration: none;
   display: block;
+  text-align: center;
 }
 
 .dl.secondary {
   background: #181818;
   border: 1px solid #333;
   color: white;
+}
+
+/* ---------- section heading ---------- */
+.section-title {
+  font-size: clamp(28px, 6vw, 38px);
+  font-weight: 800;
+  text-align: center;
+  margin: 70px 0 30px;
+}
+
+/* ---------- feature / blog cards ---------- */
+.card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card {
+  padding: 26px;
+  border-radius: 20px;
+  border: 1px solid #292929;
+  background: #0c0c0c;
+}
+
+.card .icon {
+  font-size: 28px;
+  margin-bottom: 14px;
+  display: block;
+}
+
+.card h3 {
+  margin: 0 0 10px;
+  font-size: 19px;
+}
+
+.card p {
+  margin: 0;
+  color: #999;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.card.link p {
+  margin-bottom: 16px;
+}
+
+.try-link {
+  color: #ff2855;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+/* ---------- footer ---------- */
+footer {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid #1c1c1c;
+  text-align: center;
+}
+
+footer .logo {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+footer p {
+  color: #777;
+  font-size: 14px;
+  margin: 4px 0;
 }
 </style>
 </head>
@@ -155,7 +296,14 @@ input:focus { border-color: #ff2855; }
 
 <div class="container">
 
-  <h1>Down<span class="pink">ly</span></h1>
+  <div class="nav">
+    <div class="logo">Down<span class="pink">ly</span></div>
+    <div class="lang">English ⌄</div>
+  </div>
+  <hr class="divider">
+
+  <h1>Download Any Video<br><span class="pink">Instantly</span></h1>
+  <p class="hero-sub">Download videos from TikTok, Instagram, Pinterest, YouTube and Facebook using Downly.</p>
 
   <div class="tabs">
     <div class="tab active" data-platform="tiktok">TikTok</div>
@@ -167,13 +315,65 @@ input:focus { border-color: #ff2855; }
 
   <div class="box">
     <input id="url" type="text" placeholder="Paste TikTok video link here">
-    <button id="searchBtn" class="search" onclick="search()">Search</button>
+    <button id="searchBtn" class="search" onclick="search()">Download</button>
+  </div>
+
+  <p class="platform-list">TikTok • Instagram • Pinterest • YouTube • Facebook</p>
+
+  <div class="install-wrap">
+    <div class="install-btn">📲 Install App</div>
   </div>
 
   <div id="result" class="result">
     <div id="message" class="message"></div>
     <div id="preview" class="preview" style="display:none;"></div>
   </div>
+
+  <!-- ---------- Why Use Downly ---------- -->
+  <div class="section-title">Why Use Downly?</div>
+  <div class="card-list">
+    <div class="card">
+      <span class="icon">⚡</span>
+      <h3>Fast</h3>
+      <p>Get your media information quickly and download available files with simple clicks.</p>
+    </div>
+    <div class="card">
+      <span class="icon">📱</span>
+      <h3>Mobile Friendly</h3>
+      <p>Downly works smoothly on phones, tablets and desktop browsers.</p>
+    </div>
+    <div class="card">
+      <span class="icon">🔗</span>
+      <h3>Multiple Platforms</h3>
+      <p>Use one simple downloader for supported social media platforms.</p>
+    </div>
+  </div>
+
+  <!-- ---------- Blog ---------- -->
+  <div class="section-title">Downly Blog</div>
+  <div class="card-list">
+    <div class="card link">
+      <h3>How to Download TikTok Videos</h3>
+      <p>Learn how to use Downly to fetch supported TikTok media from a shared link.</p>
+      <a class="try-link" href="#">Try Downly →</a>
+    </div>
+    <div class="card link">
+      <h3>Instagram Video Downloader</h3>
+      <p>Paste an Instagram link into Downly and check the available media options.</p>
+      <a class="try-link" href="#">Try Downly →</a>
+    </div>
+    <div class="card link">
+      <h3>Download Videos Online</h3>
+      <p>Downly provides one simple interface for supported social media links.</p>
+      <a class="try-link" href="#">Try Downly →</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="logo">Down<span class="pink">ly</span></div>
+    <p>Free online media downloader.</p>
+    <p>© 2026 Downly. All rights reserved.</p>
+  </footer>
 
 </div>
 
@@ -254,7 +454,7 @@ async function search() {
     message.textContent = "Server connection failed. Please try again."
   } finally {
     btn.disabled = false
-    btn.textContent = "Search"
+    btn.textContent = "Download"
   }
 }
 
